@@ -2,28 +2,28 @@
   <div class="flex flex-col">
     <div class="border-l">
       <span>
-        <TicketSidebarHeader title="Details" />
+        <TicketSidebarHeader :title="t('ticket_details.title')" />
         <div class="mx-5 my-6 flex flex-col justify-between gap-3.5 text-base">
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">ID</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.id') }}</span>
             <span class="block break-words font-medium text-gray-900">
               {{ data.name }}
             </span>
           </div>
           <div v-if="data.customer" class="space-y-1.5">
-            <span class="block text-sm text-gray-700">Customer</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.customer') }}</span>
             <span class="block break-words font-medium text-gray-900">
               {{ data.customer }}
             </span>
           </div>
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">First response</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.first_response') }}</span>
             <span class="mr-2 font-medium text-gray-900">
               {{ dayjs(data.first_responded_on || data.response_by).short() }}
             </span>
             <Badge
               v-if="!data.first_responded_on"
-              label="Due"
+              :label="t('ticket_details.due')"
               theme="orange"
               variant="outline"
             />
@@ -31,23 +31,23 @@
               v-else-if="
                 dayjs(data.first_responded_on).isBefore(dayjs(data.response_by))
               "
-              label="Fulfilled"
+              :label="t('ticket_details.fulfilled')"
               theme="green"
               variant="outline"
             />
-            <Badge v-else label="Failed" theme="red" variant="outline" />
+            <Badge v-else :label="t('ticket_details.failed')" theme="red" variant="outline" />
           </div>
           <div
             v-if="data.resolution_date || data.resolution_by"
             class="space-y-1.5"
           >
-            <span class="block text-sm text-gray-700">Resolution</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.resolution') }}</span>
             <span class="mr-2 font-medium text-gray-900">
               {{ dayjs(data.resolution_date || data.resolution_by).short() }}
             </span>
             <Badge
               v-if="!data.resolution_date"
-              label="Due"
+              :label="t('ticket_details.due')"
               theme="orange"
               variant="outline"
             />
@@ -55,14 +55,14 @@
               v-else-if="
                 dayjs(data.resolution_date).isBefore(data.resolution_by)
               "
-              label="Fulfilled"
+              :label="t('ticket_details.fulfilled')"
               theme="green"
               variant="outline"
             />
-            <Badge v-else label="Failed" theme="red" variant="outline" />
+            <Badge v-else :label="t('ticket_details.failed')" theme="red" variant="outline" />
           </div>
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">Modified</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.modified') }}</span>
             <Tooltip :text="dayjs(ticket.data.modified).long()">
               <span class="block break-words font-medium text-gray-900">
                 {{ dayjs(ticket.data.modified).fromNow() }}
@@ -70,13 +70,13 @@
             </Tooltip>
           </div>
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">Source</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.source') }}</span>
             <span class="block break-words font-medium text-gray-900">
-              {{ ticket.data.via_customer_portal ? "Portal" : "Mail" }}
+              {{ ticket.data.via_customer_portal ? t('ticket_details.portal') : t('ticket_details.mail') }}
             </span>
           </div>
           <div v-if="data.feedback_rating" class="space-y-1.5">
-            <span class="block text-sm text-gray-700">Feedback</span>
+            <span class="block text-sm text-gray-700">{{ t('ticket_details.feedback') }}</span>
             <StarRating :rating="data.feedback_rating" />
             <span class="block font-medium text-gray-900">
               {{ data.feedback_text }}
@@ -101,7 +101,7 @@
         </span>
         <Autocomplete
           :options="o.store.dropdown"
-          :placeholder="`Select a ${o.label}`"
+          :placeholder="t('ticket_details.select_placeholder', { label: o.label.toLowerCase() })"
           :value="data[o.field]"
           @change="update(o.field, $event.value)"
         />
@@ -120,6 +120,7 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import { createResource, Autocomplete, Tooltip } from "frappe-ui";
+import { useI18n } from "vue-i18n";
 import { dayjs } from "@/dayjs";
 import { emitter } from "@/emitter";
 import { createToast } from "@/utils";
@@ -131,23 +132,24 @@ import { StarRating, UniInput } from "@/components";
 import TicketSidebarHeader from "./TicketSidebarHeader.vue";
 import { ITicket } from "./symbols";
 
+const { t } = useI18n();
 const ticket = inject(ITicket);
 const data = computed(() => ticket.data);
 
 const options = computed(() => [
   {
     field: "ticket_type",
-    label: "Ticket type",
+    label: t("ticket_details.ticket_type"),
     store: useTicketTypeStore(),
   },
   {
     field: "priority",
-    label: "Priority",
+    label: t("ticket_details.priority"),
     store: useTicketPriorityStore(),
   },
   {
     field: "agent_group",
-    label: "Team",
+    label: t("ticket_details.team"),
     store: useTeamStore(),
   },
 ]);
@@ -165,7 +167,7 @@ function update(fieldname: string, value: string) {
     onSuccess: () => {
       emitter.emit("update:ticket");
       createToast({
-        title: "Ticket updated",
+        title: t("ticket_details.toast_updated"),
         icon: "check",
         iconClasses: "text-green-600",
       });

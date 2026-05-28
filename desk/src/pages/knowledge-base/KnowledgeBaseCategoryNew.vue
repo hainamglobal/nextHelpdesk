@@ -1,10 +1,10 @@
 <template>
-  <Dialog v-bind="attrs" :options="{ title: 'New category' }">
+  <Dialog v-bind="attrs" :options="{ title: $t('kb.new_category') }">
     <template #body-content>
       <form @submit.prevent="newCategoryRes.submit">
         <div class="space-y-4">
           <div class="space-y-2">
-            <div class="text-xs text-gray-700">Title</div>
+            <div class="text-xs text-gray-700">{{ $t('kb.title_label') }}</div>
             <div class="flex items-center gap-2">
               <KnowledgeBaseIconSelector
                 :icon="newCategoryIcon"
@@ -12,20 +12,20 @@
               />
               <FormControl
                 v-model="newCategoryName"
-                placeholder="A brief guide"
+                :placeholder="$t('kb.title_placeholder')"
                 type="text"
               />
             </div>
           </div>
           <div class="space-y-2">
-            <div class="text-xs text-gray-700">Description</div>
+            <div class="text-xs text-gray-700">{{ $t('kb.description_label') }}</div>
             <FormControl
               v-model="newCategoryDescription"
-              placeholder="A short description"
+              :placeholder="$t('kb.description_placeholder')"
               type="textarea"
             />
           </div>
-          <Button class="w-full" label="Create" theme="gray" variant="solid" />
+          <Button class="w-full" :label="$t('kb.create')" theme="gray" variant="solid" />
         </div>
       </form>
     </template>
@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { ref, useAttrs } from "vue";
+import { useI18n } from "vue-i18n";
 import { createResource, Button, Dialog, FormControl } from "frappe-ui";
 import KnowledgeBaseIconSelector from "./KnowledgeBaseIconSelector.vue";
 
@@ -43,6 +44,7 @@ interface E {
 
 const attrs = useAttrs();
 const emit = defineEmits<E>();
+const { t } = useI18n();
 const newCategoryName = ref("");
 const newCategoryDescription = ref("");
 const newCategoryIcon = ref("");
@@ -59,11 +61,15 @@ const newCategoryRes = createResource({
     };
   },
   validate(params) {
-    const requiredFields = ["category_name", "description", "icon"];
+    const requiredFields = [
+      { field: "category_name", label: t("kb.title_label") },
+      { field: "description", label: t("kb.description_label") },
+      { field: "icon", label: "Icon" },
+    ];
     for (const f of requiredFields) {
-      if (params.doc[f]) return;
-      const field = f.replace("_", " ").toUpperCase();
-      return `${field} is required`;
+      if (!params.doc[f.field]) {
+        return t("kb.required", { field: f.label });
+      }
     }
   },
   onSuccess(data) {

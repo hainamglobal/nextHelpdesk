@@ -67,6 +67,7 @@ interface P {
   resource: Resource<Array<Record<string, unknown>>>;
   checkbox?: boolean;
   filter?: boolean;
+  emptyMessage?: string;
 }
 
 const props = withDefaults(defineProps<P>(), {
@@ -83,7 +84,7 @@ const plural = computed(() => {
   return pluralize(singular.value);
 });
 const emptyMsg = computed(() => {
-  return `No ${plural.value} found`;
+  return props.emptyMessage || `No ${plural.value} found`;
 });
 const id = computed(() => {
   return route.path + "_" + props.doctype;

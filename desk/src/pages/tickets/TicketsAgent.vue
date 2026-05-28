@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Tickets">
+    <PageTitle :title="$t('sidebar.tickets')">
       <template #right>
         <RouterLink :to="{ name: 'TicketAgentNew' }">
-          <Button label="New ticket" theme="gray" variant="solid">
+          <Button :label="$t('tickets.new_ticket')" theme="gray" variant="solid">
             <template #prefix>
               <LucidePlus class="h-4 w-4" />
             </template>
@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { createResource, usePageMeta, Button, Dropdown } from "frappe-ui";
 import { AGENT_PORTAL_TICKET } from "@/router";
 import { socket } from "@/socket";
@@ -45,6 +46,7 @@ import { ColumnSelector, FilterPopover } from "@/components";
 import TicketsAgentList from "./TicketsAgentList.vue";
 import PresetFilters from "./PresetFilters.vue";
 
+const { t } = useI18n();
 const { userId } = useAuthStore();
 const { getArgs } = useFilter("HD Ticket");
 const { get: getOrder, set: setOrder } = useOrder();
@@ -182,7 +184,7 @@ const columns = [
 
 usePageMeta(() => {
   return {
-    title: "Tickets",
+    title: t("sidebar.tickets"),
   };
 });
 </script>

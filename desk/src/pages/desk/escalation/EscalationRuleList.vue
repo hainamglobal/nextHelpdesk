@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Escalation Rules">
+    <PageTitle :title="$t('sidebar.escalation_rules')">
       <template #right>
         <Button
-          label="New rule"
+          :label="$t('escalation_rules.new_rule')"
           theme="gray"
           variant="solid"
           @click="openDialog(null)"
@@ -17,12 +17,13 @@
     <ListView
       :columns="columns"
       :resource="rules"
+      :empty-message="emptyMessage"
       class="mt-2.5"
       doctype="HD Escalation Rule"
     >
       <template #is_enabled="{ data }">
         <Badge :theme="data.is_enabled ? 'green' : 'red'" variant="subtle">
-          {{ data.is_enabled ? "Enabled" : "Disabled" }}
+          {{ data.is_enabled ? $t("escalation_rules.enabled") : $t("escalation_rules.disabled") }}
         </Badge>
       </template>
     </ListView>
@@ -34,7 +35,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { usePageMeta, Badge } from "frappe-ui";
 import { socket } from "@/socket";
 import { createListManager } from "@/composables/listManager";
@@ -42,31 +44,32 @@ import { ListView } from "@/components";
 import PageTitle from "@/components/PageTitle.vue";
 import EscalationRuleDialog from "./EscalationRuleDialog.vue";
 
+const { t } = useI18n();
 const showDialog = ref(false);
 const selectedRule = ref(null);
-const emptyMessage = "No Escalation Rules Found";
-const columns = [
+const emptyMessage = computed(() => t("escalation_rules.empty"));
+const columns = computed(() => [
   {
-    label: "Priority",
+    label: t("escalation_rules.priority"),
     key: "priority",
     width: "w-64",
   },
   {
-    label: "Team",
+    label: t("escalation_rules.team"),
     key: "team",
     width: "w-64",
   },
   {
-    label: "Ticket type",
+    label: t("escalation_rules.ticket_type"),
     key: "ticket_type",
     width: "w-64",
   },
   {
-    label: "Status",
+    label: t("escalation_rules.status"),
     key: "is_enabled",
     width: "w-20",
   },
-];
+]);
 
 const rules = createListManager({
   doctype: "HD Escalation Rule",
@@ -82,7 +85,7 @@ const rules = createListManager({
 
 usePageMeta(() => {
   return {
-    title: "Escalation rules",
+    title: t("sidebar.escalation_rules"),
   };
 });
 

@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Teams">
+    <PageTitle :title="$t('sidebar.teams')">
       <template #right>
         <Button
-          label="New team"
+          :label="$t('teams.new_team')"
           theme="gray"
           variant="solid"
           @click="showNewDialog = !showNewDialog"
@@ -17,27 +17,28 @@
     <ListView
       :columns="columns"
       :resource="teams"
+      :empty-message="emptyMessage"
       class="mt-2.5"
       doctype="HD Team"
     />
     <Dialog
       v-model="showNewDialog"
       :options="{
-        title: 'New team',
+        title: $t('teams.new_team'),
       }"
     >
       <template #body-content>
         <form class="space-y-2" @submit.prevent="newTeam.submit">
           <FormControl
             v-model="newTeamTitle"
-            label="Title"
-            placeholder="Product experts"
+            :label="$t('teams.title')"
+            :placeholder="$t('teams.placeholder')"
             type="text"
           />
           <Button
             :disabled="isEmpty(newTeamTitle)"
             class="w-full"
-            label="Create"
+            :label="$t('teams.create')"
             theme="gray"
             variant="solid"
           />
@@ -47,7 +48,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { createResource, usePageMeta, Dialog, FormControl } from "frappe-ui";
 import { isEmpty } from "lodash";
@@ -59,21 +61,22 @@ import { ListView } from "@/components";
 import IconPlus from "~icons/lucide/plus";
 
 const router = useRouter();
+const { t } = useI18n();
 const showNewDialog = ref(false);
 const newTeamTitle = ref(null);
-const emptyMessage = "No Teams Found";
-const columns = [
+const emptyMessage = computed(() => t("teams.empty"));
+const columns = computed(() => [
   {
-    label: "Name",
+    label: t("common.name"),
     key: "name",
     width: "w-80",
   },
   {
-    label: "Assignment rule",
+    label: t("teams.assignment_rule"),
     key: "assignment_rule",
     width: "w-80",
   },
-];
+]);
 
 const teams = createListManager({
   doctype: "HD Team",
@@ -103,7 +106,7 @@ const newTeam = createResource({
     };
   },
   validate(params) {
-    if (isEmpty(params.doc.team_name)) return "Title is required";
+    if (isEmpty(params.doc.team_name)) return t("teams.required");
   },
   auto: false,
   onSuccess() {
@@ -114,12 +117,12 @@ const newTeam = createResource({
       },
     });
   },
-  onError: useError({ title: "Error creating team" }),
+  onError: useError({ title: t("teams.error") }),
 });
 
 usePageMeta(() => {
   return {
-    title: "Teams",
+    title: t("sidebar.teams"),
   };
 });
 </script>

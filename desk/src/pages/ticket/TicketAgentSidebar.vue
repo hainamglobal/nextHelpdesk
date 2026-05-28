@@ -43,9 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Tooltip } from "frappe-ui";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { useI18n } from "vue-i18n";
 import TicketActions from "./TicketActions.vue";
 import TicketContact from "./TicketContact.vue";
 import TicketDetails from "./TicketDetails.vue";
@@ -57,32 +58,33 @@ import LucideHistory from "~icons/lucide/history";
 import LucideView from "~icons/lucide/view";
 import LucidePointer from "~icons/lucide/pointer";
 
+const { t } = useI18n();
 const isExpanded = ref(true);
-const items = [
+const items = computed(() => [
   {
-    name: "Details",
+    name: t("ticket_sidebar.details"),
     component: TicketDetails,
     icon: LucideInfo,
   },
   {
-    name: "Actions",
+    name: t("ticket_sidebar.actions"),
     component: TicketActions,
     icon: LucidePointer,
   },
   {
-    name: "Contact",
+    name: t("ticket_sidebar.contact"),
     component: TicketContact,
     icon: LucideContact2,
   },
   {
-    name: "History",
+    name: t("ticket_sidebar.history"),
     component: TicketHistory,
     icon: LucideHistory,
   },
   {
-    name: "Views",
+    name: t("ticket_sidebar.views"),
     component: TicketViews,
     icon: LucideView,
   },
-];
+]);
 </script>

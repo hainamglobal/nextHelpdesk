@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Tickets">
+    <PageTitle :title="$t('sidebar.tickets')">
       <template #right>
         <div class="flex gap-2">
           <div
@@ -25,7 +25,7 @@
           >
             <Button
               class="bg-gray-900 text-white hover:bg-gray-800"
-              label="New ticket"
+              :label="$t('tickets.new_ticket')"
               icon-right="plus"
             />
           </RouterLink>

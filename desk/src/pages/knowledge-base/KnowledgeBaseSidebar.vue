@@ -7,7 +7,7 @@
     }"
   >
     <div class="flex items-center justify-between">
-      <div class="text-sm font-medium text-gray-600">Categories</div>
+      <div class="text-sm font-medium text-gray-600">{{ t('kb.categories') }}</div>
       <Button
         theme="gray"
         variant="ghost"
@@ -41,10 +41,13 @@ import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { createListResource, Button } from "frappe-ui";
 import { Icon } from "@iconify/vue";
+import { useI18n } from "vue-i18n";
 import { AGENT_PORTAL_KNOWLEDGE_BASE_CATEGORY } from "@/router";
 import SidebarLink from "@/components/SidebarLink.vue";
 import KnowledgeBaseCategoryNew from "./KnowledgeBaseCategoryNew.vue";
 import { getIcon } from "./util";
+
+const { t } = useI18n();
 
 const router = useRouter();
 const route = useRoute();

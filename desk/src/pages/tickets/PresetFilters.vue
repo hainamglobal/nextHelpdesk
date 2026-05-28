@@ -47,8 +47,8 @@ export default {
     },
     title() {
       if (this.presetTitle) return this.presetTitle;
-      if (this.currentQuery) return "Filtered Tickets";
-      return "All Tickets";
+      if (this.currentQuery) return this.$t("tickets.filtered_tickets");
+      return this.$t("tickets.all_tickets");
     },
     presets() {
       return this.$resources.presetFilterOptions.data || [];

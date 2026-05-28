@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Agents">
+    <PageTitle :title="$t('sidebar.agents')">
       <template #right>
         <Button
-          label="New agent"
+          :label="$t('agents.new_agent')"
           theme="gray"
           variant="solid"
           @click="isDialogVisible = !isDialogVisible"
@@ -17,6 +17,7 @@
     <ListView
       :columns="columns"
       :resource="agents"
+      :empty-message="emptyMessage"
       class="mt-2.5"
       doctype="HD Agent"
     >
@@ -31,13 +32,13 @@
             size="md"
             theme="orange"
             variant="subtle"
-            >Inactive</Badge
+            >{{ $t('agents.inactive') }}</Badge
           >
         </div>
       </template>
       <template #row-extra="{ data }">
         <div class="cursor-pointer text-xs" @click="toTickets(data.name)">
-          Tickets &rightarrow;
+          {{ $t('agents.tickets') }} &rightarrow;
         </div>
       </template>
     </ListView>
@@ -48,7 +49,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { usePageMeta, Avatar, Badge } from "frappe-ui";
 import { AGENT_PORTAL_TICKET_LIST } from "@/router";
 import { createListManager } from "@/composables/listManager";
@@ -57,25 +59,27 @@ import AddNewAgentsDialog from "@/components/desk/global/AddNewAgentsDialog.vue"
 import PageTitle from "@/components/PageTitle.vue";
 import { ListView } from "@/components";
 
+const { t } = useI18n();
 const { apply, storage } = useFilter("HD Ticket");
 const isDialogVisible = ref(false);
-const columns = [
+const emptyMessage = computed(() => t("agents.empty"));
+const columns = computed(() => [
   {
-    label: "Name",
+    label: t("common.name"),
     key: "name",
     width: "w-80",
   },
   {
-    label: "Email",
+    label: t("common.email"),
     key: "email",
     width: "w-80",
   },
   {
-    label: "Username",
+    label: t("common.username"),
     key: "username",
     width: "w-80",
   },
-];
+]);
 
 const agents = createListManager({
   doctype: "HD Agent",
@@ -98,7 +102,7 @@ const agents = createListManager({
 
 usePageMeta(() => {
   return {
-    title: "Agents",
+    title: t("sidebar.agents"),
   };
 });
 

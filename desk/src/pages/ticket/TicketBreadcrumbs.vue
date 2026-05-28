@@ -4,7 +4,7 @@
       <BreadCrumbs
         :items="[
           {
-            label: 'Tickets',
+            label: $t('sidebar.tickets'),
             route: {
               name: parent,
             },

@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Canned Responses">
+    <PageTitle :title="$t('sidebar.canned_responses')">
       <template #right>
         <Button
-          label="New canned response"
+          :label="$t('canned_responses.new_response')"
           theme="gray"
           variant="solid"
           @click="showNewDialog = true"
@@ -17,6 +17,7 @@
     <ListView
       :columns="columns"
       :resource="responses"
+      :empty-message="emptyMessage"
       class="mt-2.5"
       doctype="HD Canned Response"
     />
@@ -27,7 +28,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { usePageMeta } from "frappe-ui";
 import { AGENT_PORTAL_CANNED_RESPONSE_SINGLE } from "@/router";
 import { createListManager } from "@/composables/listManager";
@@ -35,20 +37,21 @@ import PageTitle from "@/components/PageTitle.vue";
 import { ListView } from "@/components";
 import AddNewCannedResponsesDialog from "@/components/desk/global/AddNewCannedResponsesDialog.vue";
 
+const { t } = useI18n();
 const showNewDialog = ref(false);
-const emptyMessage = "No Canned Responses Found";
-const columns = [
+const emptyMessage = computed(() => t("canned_responses.empty"));
+const columns = computed(() => [
   {
-    label: "Name",
+    label: t("canned_responses.name"),
     key: "name",
     width: "w-80",
   },
   {
-    label: "Owner",
+    label: t("canned_responses.owner"),
     key: "owner",
     width: "w-96",
   },
-];
+]);
 
 const responses = createListManager({
   doctype: "HD Canned Response",
@@ -69,7 +72,7 @@ const responses = createListManager({
 
 usePageMeta(() => {
   return {
-    title: "Canned responses",
+    title: t("sidebar.canned_responses"),
   };
 });
 </script>

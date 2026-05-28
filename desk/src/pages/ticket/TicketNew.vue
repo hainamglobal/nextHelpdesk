@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <TicketBreadcrumbs :parent="route.meta.parent" title="New" />
+    <TicketBreadcrumbs :parent="route.meta.parent" :title="$t('tickets.new_ticket')" />
     <div v-if="template.data?.about" class="mx-5 my-3">
       <div class="prose-f" v-html="sanitize(template.data.about)" />
     </div>
@@ -49,6 +49,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { createResource, usePageMeta, Button, FormControl } from "frappe-ui";
 import sanitizeHtml from "sanitize-html";
 import { isEmpty } from "lodash";
@@ -67,6 +68,7 @@ const props = withDefaults(defineProps<P>(), {
 });
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 const subject = ref("");
 const description = ref("");
 const attachments = ref([]);
@@ -122,6 +124,6 @@ function sanitize(html: string) {
 }
 
 usePageMeta(() => ({
-  title: "New Ticket",
+  title: t("tickets.new_ticket"),
 }));
 </script>

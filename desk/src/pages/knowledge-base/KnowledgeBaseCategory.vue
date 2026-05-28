@@ -7,7 +7,7 @@
       <template #right>
         <div class="space-x-2">
           <Button
-            label="Edit"
+            :label="$t('kb.edit')"
             theme="gray"
             variant="outline"
             @click="showEdit = !showEdit"
@@ -17,7 +17,7 @@
             </template>
           </Button>
           <Button
-            label="Add new"
+            :label="$t('kb.add_new')"
             theme="gray"
             variant="solid"
             @click="showNewSubCategory = !showNewSubCategory"
@@ -31,7 +31,7 @@
     </KnowledgeBaseCategoryHeader>
     <EmptyMessage
       v-if="isEmpty(subCategories.data)"
-      message="This category is empty"
+      :message="$t('kb.empty_category')"
     />
     <div v-else class="gap-4.5 grid grid-cols-3 px-5">
       <HCard
@@ -44,17 +44,22 @@
       >
         <template #bottom>
           <div class="text-base text-gray-600">
-            {{ c.count_article ? c.count_article : "No" }}
-            {{ c.count_article > 1 ? "articles" : "article" }}
+            {{
+              c.count_article === 0
+                ? $t("kb.no_articles")
+                : c.count_article === 1
+                ? $t("kb.articles_count_single", { count: c.count_article })
+                : $t("kb.articles_count", { count: c.count_article })
+            }}
           </div>
         </template>
       </HCard>
     </div>
-    <Dialog v-model="showEdit" :options="{ title: 'Edit' }">
+    <Dialog v-model="showEdit" :options="{ title: $t('kb.edit') }">
       <template #body-content>
         <div class="space-y-4">
           <div class="space-y-2">
-            <div class="text-xs text-gray-700">Title</div>
+            <div class="text-xs text-gray-700">{{ $t('kb.title_label') }}</div>
             <div class="flex items-center gap-2">
               <KnowledgeBaseIconSelector
                 :icon="newCategoryIcon || category.doc?.icon"
@@ -62,22 +67,22 @@
               />
               <FormControl
                 v-model="category.doc.category_name"
-                placeholder="A brief guide"
+                :placeholder="$t('kb.title_placeholder')"
                 type="text"
               />
             </div>
           </div>
           <div class="space-y-2">
-            <div class="text-xs text-gray-700">Description</div>
+            <div class="text-xs text-gray-700">{{ $t('kb.description_label') }}</div>
             <FormControl
               v-model="category.doc.description"
-              placeholder="A short description"
+              :placeholder="$t('kb.description_placeholder')"
               type="textarea"
             />
           </div>
           <Button
             class="w-full"
-            label="Save"
+            :label="$t('kb.save')"
             theme="gray"
             variant="solid"
             @click="saveCategory"
@@ -87,7 +92,7 @@
     </Dialog>
     <Dialog
       v-model="showNewSubCategory"
-      :options="{ title: 'New Sub category' }"
+      :options="{ title: $t('kb.new_subcategory') }"
     >
       <template #body-content>
         <form @submit.prevent="newSubCategory.submit">
@@ -95,19 +100,19 @@
             <FormControl
               v-model="newSubCategoryName"
               type="text"
-              label="Name"
-              placeholder="Name"
+              :label="$t('kb.name_label')"
+              :placeholder="$t('kb.name_label')"
             />
             <FormControl
               v-model="newSubCategoryDescription"
               type="textarea"
-              label="Description"
-              placeholder="Description"
+              :label="$t('kb.description_label')"
+              :placeholder="$t('kb.description_label')"
             />
             <Button
               :disabled="isEmpty(newSubCategoryName)"
               class="w-full"
-              label="Create"
+              :label="$t('kb.create')"
               theme="gray"
               variant="solid"
             />
@@ -119,6 +124,7 @@
 </template>
 <script setup lang="ts">
 import { ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
   createResource,
@@ -147,6 +153,7 @@ const props = defineProps({
   },
 });
 
+const { t } = useI18n();
 const router = useRouter();
 const categoryId = toRef(props, "categoryId");
 const newSubCategoryName = ref("");
@@ -164,12 +171,12 @@ const category = createDocumentResource({
   setValue: {
     onSuccess() {
       createToast({
-        title: "Category updated",
+        title: t("kb.toast_updated"),
         icon: "check",
         iconClasses: "text-green-500",
       });
     },
-    onError: useError({ title: "Error updating category" }),
+    onError: useError({ title: t("kb.toast_update_error") }),
   },
 });
 
@@ -198,14 +205,14 @@ const newSubCategory = createResource({
   },
   validate(params) {
     if (isEmpty(params.doc.category_name)) {
-      return "Category name is required";
+      return t("kb.required", { field: t("kb.name_label") });
     }
   },
   onSuccess() {
     showNewSubCategory.value = false;
     subCategories.reload();
   },
-  onError: useError({ title: "Error creating sub category" }),
+  onError: useError({ title: t("kb.toast_create_error") }),
 });
 
 const subCategories = createListManager({

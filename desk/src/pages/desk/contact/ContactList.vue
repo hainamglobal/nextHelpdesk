@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Contacts">
+    <PageTitle :title="$t('sidebar.contacts')">
       <template #right>
         <Button
-          label="New contact"
+          :label="$t('contacts.new_contact')"
           theme="gray"
           variant="solid"
           @click="isDialogVisible = !isDialogVisible"
@@ -17,6 +17,7 @@
     <ListView
       :columns="columns"
       :resource="contacts"
+      :empty-message="emptyMessage"
       class="mt-2.5"
       doctype="Contact"
     >
@@ -37,7 +38,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { usePageMeta, Avatar } from "frappe-ui";
 import { createListManager } from "@/composables/listManager";
 import NewContactDialog from "@/components/desk/global/NewContactDialog.vue";
@@ -45,26 +47,28 @@ import PageTitle from "@/components/PageTitle.vue";
 import { ListView } from "@/components";
 import ContactDialog from "./ContactDialog.vue";
 
+const { t } = useI18n();
 const isDialogVisible = ref(false);
 const isContactDialogVisible = ref(false);
 const selectedContact = ref(null);
-const columns = [
+const emptyMessage = computed(() => t("contacts.empty"));
+const columns = computed(() => [
   {
-    label: "Name",
+    label: t("common.name"),
     key: "name",
     width: "w-80",
   },
   {
-    label: "Email",
+    label: t("common.email"),
     key: "email_id",
     width: "w-80",
   },
   {
-    label: "Phone",
+    label: t("common.phone"),
     key: "phone",
     width: "w-80",
   },
-];
+]);
 
 const contacts = createListManager({
   doctype: "Contact",
@@ -80,7 +84,7 @@ const contacts = createListManager({
 
 usePageMeta(() => {
   return {
-    title: "Contacts",
+    title: t("sidebar.contacts"),
   };
 });
 

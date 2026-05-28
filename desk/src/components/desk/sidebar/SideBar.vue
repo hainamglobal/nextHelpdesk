@@ -16,7 +16,7 @@
       />
       <SidebarLink
         class="relative"
-        label=" Notifications"
+        :label="t('sidebar.notifications')"
         :icon="LucideInbox"
         :on-click="() => notificationStore.toggle()"
         :is-expanded="isExpanded"
@@ -54,7 +54,7 @@
       :icon="isExpanded ? LucideArrowLeftFromLine : LucideArrowRightFromLine"
       :is-active="false"
       :is-expanded="isExpanded"
-      :label="isExpanded ? 'Collapse' : 'Expand'"
+      :label="isExpanded ? t('sidebar.collapse') : t('sidebar.expand')"
       :on-click="() => (isExpanded = !isExpanded)"
     />
   </div>
@@ -68,6 +68,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useKeymapStore } from "@/stores/keymap";
 import { useNotificationStore } from "@/stores/notification";
 import { useSidebarStore } from "@/stores/sidebar";
+import { useI18n } from "vue-i18n";
 import {
   AGENT_PORTAL_AGENT_LIST,
   AGENT_PORTAL_CANNED_RESPONSE_LIST,
@@ -102,75 +103,76 @@ const authStore = useAuthStore();
 const keymapStore = useKeymapStore();
 const notificationStore = useNotificationStore();
 const { isExpanded, width } = storeToRefs(useSidebarStore());
+const { t, locale } = useI18n();
 
 const menuOptions = computed(() => [
   {
-    label: "Tickets",
+    label: t("sidebar.tickets"),
     icon: LucideTicket,
     to: AGENT_PORTAL_TICKET_LIST,
   },
   {
-    label: "Dashboard",
+    label: t("sidebar.dashboard"),
     icon: LucideLayoutGrid,
     to: AGENT_PORTAL_DASHBOARD,
   },
   {
-    label: "Agents",
+    label: t("sidebar.agents"),
     icon: LucideUser,
     to: AGENT_PORTAL_AGENT_LIST,
   },
   {
-    label: "Knowledge base",
+    label: t("sidebar.knowledge_base"),
     icon: LucideBookOpen,
     to: "DeskKBHome",
     isBeta: true,
   },
 ]);
 
-const extraOptions = [
+const extraOptions = computed(() => [
   {
-    label: "Teams",
+    label: t("sidebar.teams"),
     icon: LucideUsers,
     to: AGENT_PORTAL_TEAM_LIST,
   },
   {
-    label: "Escalation rules",
+    label: t("sidebar.escalation_rules"),
     icon: LucideArrowUpFromLine,
     to: AGENT_PORTAL_ESCALATION_RULE_LIST,
     isBeta: true,
   },
   {
-    label: "Ticket types",
+    label: t("sidebar.ticket_types"),
     icon: LucideFolderOpen,
     to: AGENT_PORTAL_TICKET_TYPE_LIST,
     hide: true,
   },
   {
-    label: "Canned responses",
+    label: t("sidebar.canned_responses"),
     icon: LucideCloudLightning,
     to: AGENT_PORTAL_CANNED_RESPONSE_LIST,
     isBeta: true,
   },
   {
-    label: "Customers",
+    label: t("sidebar.customers"),
     icon: LucideUserCircle2,
     to: AGENT_PORTAL_CUSTOMER_LIST,
   },
   {
-    label: "Contacts",
+    label: t("sidebar.contacts"),
     icon: LucideContact2,
     to: AGENT_PORTAL_CONTACT_LIST,
   },
-];
+]);
 
-const profileSettings = [
+const profileSettings = computed(() => [
   {
-    label: "Shortcuts",
+    label: t("sidebar.shortcuts"),
     icon: "command",
     onClick: () => keymapStore.toggleVisibility(true),
   },
   {
-    label: "Customer portal",
+    label: t("sidebar.customer_portal"),
     icon: "users",
     onClick: () => {
       const path = router.resolve({ name: CUSTOMER_PORTAL_LANDING });
@@ -178,9 +180,17 @@ const profileSettings = [
     },
   },
   {
-    label: "Log out",
+    label: locale.value === "vi" ? "English (EN)" : "Tiếng Việt (VI)",
+    icon: "globe",
+    onClick: () => {
+      locale.value = locale.value === "vi" ? "en" : "vi";
+      localStorage.setItem("locale", locale.value);
+    },
+  },
+  {
+    label: t("sidebar.logout"),
     icon: "log-out",
     onClick: () => authStore.logout(),
   },
-];
+]);
 </script>

@@ -7,7 +7,7 @@
       <template #right>
         <div class="space-x-2">
           <Button
-            label="Edit"
+            :label="$t('kb.edit')"
             theme="gray"
             variant="outline"
             @click="showEdit = !showEdit"
@@ -17,7 +17,7 @@
             </template>
           </Button>
           <Button
-            label="Add new"
+            :label="$t('kb.add_new')"
             theme="gray"
             variant="solid"
             @click="toNewArticle"
@@ -41,33 +41,33 @@
           :theme="data.status === 'Published' ? 'green' : 'orange'"
           variant="subtle"
         >
-          {{ data.status }}
+          {{ data.status === 'Published' ? $t('kb.published') : $t('kb.draft') }}
         </Badge>
       </template>
       <template #emptyMessage>
-        <EmptyMessage message="This sub category is empty" />
+        <EmptyMessage :message="$t('kb.empty_subcategory')" />
       </template>
     </ListView>
-    <Dialog v-model="showEdit" :options="{ title: 'Edit' }">
+    <Dialog v-model="showEdit" :options="{ title: $t('kb.edit') }">
       <template #body-content>
         <form @submit.prevent="saveSubCategory">
           <div class="space-y-4">
             <FormControl
               v-model="newSubCategoryName"
               :placeholder="subCategory.doc.category_name"
-              label="Name"
+              :label="$t('kb.name_label')"
               type="text"
             />
             <FormControl
               v-model="newSubCategoryDescription"
               :placeholder="subCategory.doc.description"
-              label="Description"
+              :label="$t('kb.description_label')"
               type="textarea"
             />
             <Button
               :disabled="!newSubCategoryName && !newSubCategoryDescription"
               class="w-full"
-              label="Save"
+              :label="$t('kb.save')"
               theme="gray"
               variant="solid"
             />
@@ -78,7 +78,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
   createDocumentResource,
@@ -105,6 +106,7 @@ const props = defineProps({
   },
 });
 
+const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const newSubCategoryName = ref("");
@@ -116,7 +118,7 @@ const subCategory = createDocumentResource({
   name: props.subCategoryId,
   auto: true,
   setValue: {
-    onError: useError({ title: "Error creating sub category" }),
+    onError: useError({ title: t("kb.toast_update_error") }),
   },
 });
 
@@ -149,23 +151,23 @@ const articles = createListManager({
   },
 });
 
-const columns = [
+const columns = computed(() => [
   {
-    label: "Title",
+    label: t("kb.title_label"),
     key: "title",
     width: "w-96",
   },
   {
-    label: "Views",
+    label: t("kb.views"),
     key: "views",
     width: "w-12",
   },
   {
-    label: "Status",
+    label: t("kb.status"),
     key: "status",
     width: "w-40",
   },
-];
+]);
 
 function toNewArticle() {
   router.push({

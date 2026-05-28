@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <PageTitle title="Ticket Types">
+    <PageTitle :title="$t('sidebar.ticket_types')">
       <template #right>
         <RouterLink :to="{ name: AGENT_PORTAL_TICKET_TYPE_NEW }">
-          <Button label="New ticket type" theme="gray" variant="solid">
+          <Button :label="$t('ticket_types.new_type')" theme="gray" variant="solid">
             <template #prefix>
               <LucidePlus class="h-4 w-4" />
             </template>
@@ -14,12 +14,15 @@
     <ListView
       :columns="columns"
       :resource="ticketTypes"
+      :empty-message="emptyMessage"
       class="mt-2.5"
       doctype="HD Ticket Type"
     />
   </div>
 </template>
 <script setup lang="ts">
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { usePageMeta } from "frappe-ui";
 import {
   AGENT_PORTAL_TICKET_TYPE_NEW,
@@ -29,18 +32,20 @@ import { createListManager } from "@/composables/listManager";
 import PageTitle from "@/components/PageTitle.vue";
 import { ListView } from "@/components";
 
-const columns = [
+const { t } = useI18n();
+const emptyMessage = computed(() => t("ticket_types.empty"));
+const columns = computed(() => [
   {
-    label: "Name",
+    label: t("common.name"),
     key: "name",
     width: "w-80",
   },
   {
-    label: "Priority",
+    label: t("common.priority"),
     key: "priority",
     width: "w-80",
   },
-];
+]);
 
 const ticketTypes = createListManager({
   doctype: "HD Ticket Type",
@@ -61,7 +66,7 @@ const ticketTypes = createListManager({
 
 usePageMeta(() => {
   return {
-    title: "Ticket types",
+    title: t("sidebar.ticket_types"),
   };
 });
 </script>

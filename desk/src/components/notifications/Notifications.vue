@@ -13,7 +13,7 @@
     <div
       class="sticky top-0 z-10 flex items-center justify-between border-b bg-white px-5 py-2.5"
     >
-      <span class="text-lg font-medium">Notifications</span>
+      <span class="text-lg font-medium">{{ t('sidebar.notifications') }}</span>
       <span>
         <Button
           theme="blue"
@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
 import { dayjs } from "@/dayjs";
 import { Notification } from "@/types";
 import { useSidebarStore } from "@/stores/sidebar";
@@ -70,6 +71,7 @@ import { useNotificationStore } from "@/stores/notification";
 import { UserAvatar } from "@/components";
 import NotificationsMention from "./NotificationsMention.vue";
 
+const { t } = useI18n();
 const notificationStore = useNotificationStore();
 const sidebarStore = useSidebarStore();
 const target = ref(null);

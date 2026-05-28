@@ -18,6 +18,7 @@ import "./index.css";
 import { router } from "./router";
 import { socket } from "./socket";
 import { createToast } from "@/utils";
+import i18n from "./i18n";
 
 const globalComponents = {
   Badge,
@@ -37,6 +38,7 @@ const app = createApp(App);
 app.use(resourcesPlugin);
 app.use(pinia);
 app.use(router);
+app.use(i18n);
 
 for (const c in globalComponents) {
   app.component(c, globalComponents[c]);

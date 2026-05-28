@@ -1,9 +1,9 @@
 <template>
 	<div class="p-5">
 		<div class="flex">
-			<div>Please login to access Helpdesk</div>
+			<div>{{ $t('login.please_login') }}</div>
 			<div class="ml-2">
-				<Button @click="login">Login</Button>
+				<Button @click="login">{{ $t('login.btn_login') }}</Button>
 			</div>
 		</div>
 	</div>
