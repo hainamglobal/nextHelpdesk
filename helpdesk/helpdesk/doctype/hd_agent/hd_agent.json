@@ -10,7 +10,8 @@
   "agent_name",
   "user_image",
   "is_active",
-  "groups"
+  "groups",
+  "channel_id"
  ],
  "fields": [
   {
@@ -47,6 +48,11 @@
    "fieldtype": "Data",
    "label": "Image",
    "read_only": 1
+  },
+  {
+   "fieldname": "channel_id",
+   "fieldtype": "Data",
+   "label": "Kênh"
   }
  ],
  "index_web_pages_for_search": 1,
