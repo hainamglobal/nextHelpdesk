@@ -3,11 +3,13 @@ import frappe
 def get_nextgrp_develop_config():
     """Lấy thông tin cấu hình từ HD Site Config"""
     
-    organization = frappe.conf.get("organization")
+    # organization = frappe.conf.get("organization")
+
+    site_url = "https://develop.nextgrp.vn"
     
     config = frappe.get_all(
         "HD Site Config",
-        filters={"organization": organization},
+        filters={"site_url": site_url},
         fields=["name", "site_url", "api_key"],
         limit=1
     )
