@@ -1,5 +1,6 @@
 import frappe
-from helpdesk.service.add_user_to_chanel import RavenChannelService
+from helpdesk.service.agent_service import AgentService
+from helpdesk.service.external_channel_service import RavenChannelService
 
 @frappe.whitelist()
 def sent_invites(emails, send_welcome_mail_to_user=True):
@@ -30,3 +31,8 @@ def sent_invites(emails, send_welcome_mail_to_user=True):
         frappe.throw(f"Đã xảy ra lỗi trong quá trình tạo Agent. Đã rollback dữ liệu. Chi tiết lỗi: {str(e)}")
 
     return
+
+@frappe.whitelist()
+def delete_agent(name):
+        agent_service = AgentService()
+        agent_service.delete_agent(name)

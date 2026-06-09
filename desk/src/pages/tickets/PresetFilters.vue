@@ -54,17 +54,25 @@ export default {
       return this.$resources.presetFilterOptions.data || [];
     },
     options() {
+      const presetTitleMap = {
+        "All Tickets": "Tất cả phiếu",
+        "My Open Tickets": "Phiếu đang mở của tôi",
+        "My Replied Tickets": "Phiếu đã phản hồi của tôi",
+        "My Resolved Tickets": "Phiếu đã giải quyết của tôi",
+        "My Closed Tickets": "Phiếu đã đóng của tôi",
+      };
+
       let options = [];
       let data = this.presets;
       if (Object.keys(data).length) {
         Object.keys(data).forEach((group) => {
           if (data[group].length) {
             options.push({
-              group: group === "user" ? "My Filters" : "Global",
+              group: group === "user" ? "Bộ lọc của tôi" : "Toàn hệ thống",
               hideLabel: group !== "user",
               items: data[group].map((item) => {
                 return {
-                  label: item.title,
+                  label: presetTitleMap[item.title] || item.title,
                   onClick: () => {
                     this.storage.clear();
                     item.filters.forEach((f) =>

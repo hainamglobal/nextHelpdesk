@@ -8,10 +8,13 @@
   >
     <template #status="{ data }">
       <Badge
-        :label="data.status"
+        :label="statusLabelMap[data.status] || data.status"
         :theme="ticketStatusStore.colorMap[data.status]"
         variant="subtle"
       />
+    </template>
+    <template #priority="{ data }">
+      {{ priorityLabelMap[data.priority] || data.priority }}
     </template>
     <template #conversation="{ data }">
       <span class="flex items-center">
@@ -34,7 +37,7 @@
     </template>
     <template #agreement_status="{ data }">
       <Badge
-        :label="data.agreement_status"
+        :label="slaLabelMap[data.agreement_status] || data.agreement_status"
         :theme="slaStatusColorMap[data.agreement_status]"
         variant="outline"
       />
@@ -46,13 +49,13 @@
             data.first_responded_on &&
             dayjs(data.first_responded_on).isBefore(data.response_by)
           "
-          label="Fulfilled"
+          label="Đúng hạn"
           theme="green"
           variant="outline"
         />
         <Badge
           v-else-if="dayjs(data.first_responded_on).isAfter(data.response_by)"
-          label="Failed"
+          label="Trễ hạn"
           theme="red"
           variant="outline"
         />
@@ -68,13 +71,13 @@
             data.resolution_date &&
             dayjs(data.resolution_date).isBefore(data.resolution_by)
           "
-          label="Fulfilled"
+          label="Đúng hạn"
           theme="green"
           variant="outline"
         />
         <Badge
           v-else-if="dayjs(data.resolution_date).isAfter(data.resolution_by)"
-          label="Failed"
+          label="Trễ hạn"
           theme="red"
           variant="outline"
         />
@@ -90,14 +93,14 @@
       {{ dayjs(data.modified).fromNow() }}
     </template>
     <template #via_customer_portal="{ data }">
-      {{ data.via_customer_portal ? "Customer Portal" : "Email" }}
+      {{ data.via_customer_portal ? "Cổng khách hàng" : "Email" }}
     </template>
     <template #actions="{ selection: s }">
       <Dropdown :options="assignOpts(s as Set<number>)">
         <template #default>
           <Button
             class="flex cursor-pointer items-center gap-1 text-gray-700"
-            label="Assign"
+            label="Phân công"
             theme="gray"
             variant="ghost"
           >
@@ -139,16 +142,41 @@ const slaStatusColorMap = {
   Paused: "blue",
 };
 
+// Map trạng thái sang tiếng Việt
+const statusLabelMap: Record<string, string> = {
+  Open: "Mở",
+  Replied: "Đã phản hồi",
+  Resolved: "Đã giải quyết",
+  Closed: "Đóng",
+};
+
+// Map ưu tiên sang tiếng Việt
+const priorityLabelMap: Record<string, string> = {
+  Urgent: "Khẩn cấp",
+  High: "Cao",
+  Medium: "Trung bình",
+  Low: "Thấp",
+};
+
+// Map giá trị API sang tiếng Việt
+const slaLabelMap: Record<string, string> = {
+  Fulfilled: "Đúng hạn",
+  Failed: "Trễ hạn",
+  "Resolution Due": "Sắp đến hạn giải quyết",
+  "First Response Due": "Sắp đến hạn phản hồi",
+  Paused: "Tạm dừng",
+};
+
 const bulkAssignTicketToAgent = createResource({
   url: "helpdesk.api.ticket.bulk_assign_ticket_to_agent",
   onSuccess: () => {
     createToast({
-      title: "Tickets assigned to agent",
+      title: "Phân công phiếu thành công",
       icon: "check",
       iconClasses: "text-green-500",
     });
   },
-  onError: useError({ title: "Unable to assign tickets to agent" }),
+  onError: useError({ title: "Không thể phân công phiếu" }),
 });
 
 function assignOpts(selected: Set<number>) {

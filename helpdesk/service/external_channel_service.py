@@ -9,6 +9,13 @@ class RavenChannelService:
     def __init__(self):
         self.config = get_nextgrp_develop_config()
         self.channel_name = "Nhóm hỗ trợ khách hàng nextGrp"
+        
+        channel_id = self.check_local_channel()
+        if not channel_id:
+            channel_id = self.create_raven_channel()
+            self.insert_channel_agent_name(channel_id)
+            
+        self.channel_id = channel_id
 
     def create_raven_channel(self):
         insert_url = f"{self.config['url']}/api/method/frappe.client.insert"
@@ -82,25 +89,8 @@ class RavenChannelService:
 
     def add_user_to_chanel_site_config(self, member_email):
         """
-        Hàm tổng hợp: 
-        1. Kiểm tra xem DB local đã lưu channel_id cho channel_name này chưa.
-        2. Nếu chưa có: Tạo Raven Channel trên site develop -> Lấy ID mới -> Lưu xuống DB local.
-        3. Nếu đã có: Lấy luôn ID đó.
-        4. Gọi API add_channel_members.
+        Hàm tổng hợp: Thêm member vào channel
         """
-        
-        # Bước 1: Kiểm tra trong DB local
-        channel_id = self.check_local_channel()
-        
-        if not channel_id:
-            # Bước 2: Chưa có thì tạo mới trên site develop
-            channel_id = self.create_raven_channel()
-            # Lưu xuống DB local để dùng cho các user sau
-            self.insert_channel_agent_name(channel_id)
-            
-        # Cập nhật ID để dùng trong add_member_to_channel
-        self.channel_id = channel_id
-
         # Thêm member vào channel
         self.add_member_to_channel(member_email)
 
@@ -110,3 +100,36 @@ class RavenChannelService:
             "channel_name": self.channel_name,
             "members_added": [member_email]
         }
+
+    def get_member_from_email(self,email):
+        get_member_url = f"{self.config['url']}/api/method/raven.api.raven_channel_member.get_member_from_email"
+        payload = {
+            "email": email,
+            "channel_id": self.channel_id,
+        }
+        try:
+            res_check = requests.post(get_member_url, json=payload, headers=self.config['headers'])
+            res_check.raise_for_status()
+            
+            message = res_check.json().get("message", {})
+            return message.get("member_id") if isinstance(message, dict) else ""
+        except requests.exceptions.RequestException as e:
+            frappe.throw(str(e))
+
+    def delete_user_in_channel(self,email):
+        member_id = self.get_member_from_email(email)
+        if not member_id:
+            frappe.throw("Không tìm thấy member_id từ email")
+    
+        delete_member_url = f"{self.config['url']}/api/method/raven.api.raven_channel_member.delete_channel_member"
+        payload = {
+            "channel_id": self.channel_id,
+            "member_id": member_id,
+        }
+        
+        try:
+            res = requests.post(delete_member_url, json=payload, headers=self.config['headers'])
+            res.raise_for_status()
+            return True
+        except requests.exceptions.RequestException as e:
+            frappe.throw(str(e))

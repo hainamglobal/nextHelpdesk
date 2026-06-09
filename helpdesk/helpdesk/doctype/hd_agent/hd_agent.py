@@ -41,6 +41,7 @@ class HDAgent(Document):
 			self.add_to_support_rotations()
 
 	def on_trash(self):
+		frappe.only_for("System Manager")
 		self.remove_from_support_rotations()
 
 	def add_to_support_rotations(self, group=None):

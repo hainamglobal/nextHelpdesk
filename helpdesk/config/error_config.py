@@ -10,6 +10,9 @@ class ErrorConfig(Enum):
     ADD_MEMBER_LOG_TITLE = (StatusCode.INTERNAL_SERVER_ERROR, "MEMBER-ERR-500", "Lỗi thêm User vào Raven Channel")
     ADD_MEMBER_THROW = (StatusCode.INTERNAL_SERVER_ERROR, "MEMBER-ERR-501", "Đã có lỗi xảy ra khi thêm thành viên vào Channel trên site Develop. Vui lòng kiểm tra Error Log.")
 
+    # agent ko tồn tại
+    AGENT_NOT_EXIST = (StatusCode.NOT_FOUND ,"AGENT-ERR-001" ,"Nhân viên không tôn tại" )
+
     def __init__(self, status, error_code, message):
         self.status = status
         self.error_code = error_code
