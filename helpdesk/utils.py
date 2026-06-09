@@ -12,6 +12,11 @@ from pypika import Criterion
 
 def check_permissions(doctype, parent):
 	user = frappe.session.user
+
+	# Administrator và System Manager được phép truy cập tất cả
+	if user == "Administrator" or "System Manager" in frappe.get_roles(user):
+		return
+
 	permissions = ("select", "read")
 	has_select_permission, has_read_permission = [
 		frappe.has_permission(doctype, perm, user=user, parent_doctype=parent)

@@ -32,8 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import { createResource, usePageMeta, Button, Dropdown } from "frappe-ui";
 import { AGENT_PORTAL_TICKET } from "@/router";
 import { socket } from "@/socket";
@@ -47,8 +48,9 @@ import TicketsAgentList from "./TicketsAgentList.vue";
 import PresetFilters from "./PresetFilters.vue";
 
 const { t } = useI18n();
-const { userId } = useAuthStore();
-const { getArgs } = useFilter("HD Ticket");
+const route = useRoute();
+const { userId, isAdmin } = useAuthStore();
+const { getArgs, storage, add, apply, fields } = useFilter("HD Ticket");
 const { get: getOrder, set: setOrder } = useOrder();
 const pageLength = ref(20);
 const tickets = createListManager({
@@ -78,6 +80,33 @@ const tickets = createListManager({
     return data;
   },
 });
+
+// Chỉ set filter mặc định khi chưa có query trên URL (lần đầu vào trang)
+// Khi user xóa filter thủ công: URL sẽ có q="" → không ghi đè, tránh giật
+onMounted(() => {
+  if (route.query.q !== undefined) return; // user đã tự set hoặc xóa filter
+
+  if (isAdmin.value) {
+    // Admin: không filter, hiện tất cả
+    return;
+  }
+
+  // User thường: set mặc định Assigned To = user hiện tại
+  storage.value.clear();
+  add({
+    field: {
+      label: "Assigned To",
+      fieldname: "_assign",
+      fieldtype: "Small Text",
+      options: "",
+    },
+    fieldname: "_assign",
+    operator: "like",
+    value: userId.value,
+  });
+  apply();
+});
+
 
 const sortOptionsRes = createResource({
   url: "helpdesk.extends.doc.sort_options",
