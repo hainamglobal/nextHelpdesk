@@ -1,0 +1,11 @@
+class ResponseMessage:
+    SUCCESS = "Success"
+    FAILED = "Failed"
+    CLIENT_NOT_AVAILABLE = "Client not available"
+    INTERNAL_SERVER_ERROR = "INTERNAL SERVER ERROR"
+    GET_ONE = "GET ONE"
+    GET_LIST = "GET LIST"
+    CREATED = "CREATED"
+    UPDATED = "UPDATED"
+    DELETED = "DELETED"
+    UNAUTHORIZED = "UNAUTHORIZED"

@@ -1,5 +1,6 @@
 import frappe
-from helpdesk.config.error_config import ErrorConfig
+from helpdesk.config.response.error_code import ErrorConfig
+from helpdesk.config.response import CommonException
 from helpdesk.repository.agent_repository import delete_agent_repository, check_name_is_exist
 from helpdesk.service.external_channel_service import RavenChannelService
 
@@ -9,7 +10,8 @@ class AgentService:
         self.raven_service = RavenChannelService()
 
     def delete_agent(self, name):
-        frappe.only_for("System Manager")
+        if "System Manager" not in frappe.get_roles(frappe.session.user):
+            raise CommonException(ErrorConfig.FORBIDDEN_ERROR)
 
         check = check_name_is_exist(name)
         if check:
@@ -19,10 +21,10 @@ class AgentService:
                     self.raven_service.delete_user_in_channel(email)
                 except Exception as e:
                     frappe.log_error(title="Delete Raven Channel Member Error", message=str(e))
-
             delete_agent_repository(name)
+            return True
         else:
-            frappe.throw(ErrorConfig.AGENT_NOT_EXIST.message)
+            raise CommonException(ErrorConfig.AGENT_NOT_EXIST)
 
 
 

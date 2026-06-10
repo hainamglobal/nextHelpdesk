@@ -86,6 +86,7 @@
 <script>
 import { Dialog, Input, FeatherIcon } from "frappe-ui"
 import { ref } from "@vue/reactivity"
+import { showGlobalError } from "@/utils"
 
 export default {
 	name: "AddNewAgentsDialog",
@@ -187,6 +188,7 @@ export default {
 						iconClasses: "text-green-500"
 					})
 
+					this.$emit("success", res)
 					this.close()
 				},
 				onError: (err) => {
@@ -198,11 +200,7 @@ export default {
 							iconClasses: "text-red-500",
 						})
 					} else {
-						this.$toast({
-							title: "Error Sending Invites!",
-							icon: "x",
-							iconClasses: "text-red-500",
-						})
+						showGlobalError(err);
 					}
 				},
 			}

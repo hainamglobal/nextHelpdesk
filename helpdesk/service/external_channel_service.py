@@ -1,7 +1,7 @@
 import frappe
 import requests
 from helpdesk.config.config_sites import get_nextgrp_develop_config
-from helpdesk.config.error_config import ErrorConfig
+from helpdesk.config.response.error_code import ErrorConfig
 from helpdesk.repository.hd_agent_channel_repository import insert_chanel_id
 
 

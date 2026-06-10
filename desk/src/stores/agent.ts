@@ -1,6 +1,6 @@
 import { computed, ComputedRef } from "vue";
 import { defineStore } from "pinia";
-import { createListResource } from "frappe-ui";
+import { createListResource, createResource } from "frappe-ui";
 
 type Agent = {
   name: string;
@@ -29,8 +29,19 @@ export const useAgentStore = defineStore("agent", () => {
     }))
   );
 
+  const deleteAgentResource = createResource({
+    url: "helpdesk.api.agent.delete_agent",
+  });
+
+  const deleteAgent = (name: string) => {
+    return deleteAgentResource.submit({ name }).then(() => {
+      d__.reload(); // also reload store's data if needed
+    });
+  };
+
   return {
     dropdown,
     options,
+    deleteAgent,
   };
 });

@@ -1,9 +1,13 @@
 import frappe
 from helpdesk.service.agent_service import AgentService
 from helpdesk.service.external_channel_service import RavenChannelService
+from helpdesk.config.response import DefaultRes, ResponseMessage, CommonException
+from helpdesk.config.response.error_code import ErrorConfig
+
 
 @frappe.whitelist()
 def sent_invites(emails, send_welcome_mail_to_user=True):
+    created_agents = []
     try:
         channel_service = RavenChannelService()
         
@@ -23,16 +27,15 @@ def sent_invites(emails, send_welcome_mail_to_user=True):
             channel_id = res.get("channel_id")
             # Tạo HD Agent
             doc = {"doctype": "HD Agent", "user": user.name , "channel_id": channel_id}
-            frappe.get_doc(doc).insert()
-
+            new_agent = frappe.get_doc(doc).insert()
+            created_agents.append(new_agent.as_dict())
+            return DefaultRes.res(200, ResponseMessage.SUCCESS, created_agents).to_dict()
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error("Lỗi sent_invites (HD Agent)", frappe.get_traceback())
-        frappe.throw(f"Đã xảy ra lỗi trong quá trình tạo Agent. Đã rollback dữ liệu. Chi tiết lỗi: {str(e)}")
-
-    return
+        raise CommonException(ErrorConfig.CREATE_AGENT_ERROR.throw(str(e)))
 
 @frappe.whitelist()
 def delete_agent(name):
         agent_service = AgentService()
-        agent_service.delete_agent(name)
+        return DefaultRes.res(200, ResponseMessage.SUCCESS,agent_service.delete_agent(name)).to_dict()
