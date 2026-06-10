@@ -48,6 +48,10 @@ export function getAssign(s: string): string | undefined {
  */
 export function getErrorMessage(errorCode: string): { title: string; message: string } | null {
   const errorMap: Record<string, { title: string; message: string }> = {
+    "SYS-ERR-403": {
+      title: "Lỗi phân quyền",
+      message: "Bạn không có quyền thực hiện thao tác này.",
+    },
     "AGENT-ERR-001": {
       title: "Lỗi tạo Agent",
       message: "Nhân viên không tồn tại.",

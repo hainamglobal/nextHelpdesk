@@ -10,6 +10,8 @@ type Agent = {
   user_image: string;
 };
 
+import { showGlobalError } from "@/utils";
+
 export const useAgentStore = defineStore("agent", () => {
   const d__ = createListResource({
     doctype: "HD Agent",
@@ -34,9 +36,14 @@ export const useAgentStore = defineStore("agent", () => {
   });
 
   const deleteAgent = (name: string) => {
-    return deleteAgentResource.submit({ name }).then(() => {
-      d__.reload(); // also reload store's data if needed
-    });
+    return deleteAgentResource.submit({ name })
+      .then(() => {
+        d__.reload(); // also reload store's data if needed
+      })
+      .catch((err: any) => {
+        showGlobalError(err);
+        throw err;
+      });
   };
 
   return {
