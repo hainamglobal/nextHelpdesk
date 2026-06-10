@@ -46,9 +46,18 @@ export const useAgentStore = defineStore("agent", () => {
       });
   };
 
+  const searchUserResource = createResource({
+    url: "helpdesk.api.agent.get_list_email",
+  });
+
+  const searchUser = (query: string) => {
+    return searchUserResource.submit({ query });
+  };
+
   return {
     dropdown,
     options,
     deleteAgent,
+    searchUser,
   };
 });

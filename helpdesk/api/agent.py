@@ -39,3 +39,9 @@ def sent_invites(emails, send_welcome_mail_to_user=True):
 def delete_agent(name):
         agent_service = AgentService()
         return DefaultRes.res(200, ResponseMessage.SUCCESS,agent_service.delete_agent(name)).to_dict()
+
+@frappe.whitelist()
+def get_list_email(query=""):
+    agent_service = AgentService()
+    result = agent_service.get_list_email(query)
+    return DefaultRes.res(200, ResponseMessage.SUCCESS, result).to_dict()
