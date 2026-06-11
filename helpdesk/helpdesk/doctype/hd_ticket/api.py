@@ -36,6 +36,8 @@ def get_one(name):
 	QBTicket = frappe.qb.DocType("HD Ticket")
 
 	_is_agent = is_agent()
+	user = frappe.session.user
+	is_admin_or_system_manager = user == "Administrator" or "System Manager" in frappe.get_roles(user)
 
 	query = (
 		frappe.qb.from_(QBTicket)
@@ -44,7 +46,7 @@ def get_one(name):
 		.limit(1)
 	)
 
-	if not _is_agent:
+	if not _is_agent and not is_admin_or_system_manager:
 		query = query.where(get_customer_criteria())
 
 	ticket = query.run(as_dict=True)
