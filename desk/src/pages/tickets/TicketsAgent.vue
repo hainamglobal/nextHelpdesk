@@ -49,8 +49,25 @@ import PresetFilters from "./PresetFilters.vue";
 
 const { t } = useI18n();
 const route = useRoute();
-const { userId, isAdmin } = useAuthStore();
+const authStore = useAuthStore();
 const { getArgs, storage, add, apply, fields } = useFilter("HD Ticket");
+
+// Chỉ set filter mặc định khi chưa có query trên URL (lần đầu vào trang)
+if (route.query.q === undefined && !authStore.isAdmin) {
+  storage.value.clear();
+  add({
+    field: {
+      label: "Assigned To",
+      fieldname: "_assign",
+      fieldtype: "Link",
+      options: "HD Agent",
+    },
+    fieldname: "_assign",
+    operator: "is",
+    value: authStore.userId,
+  });
+}
+
 const { get: getOrder, set: setOrder } = useOrder();
 const pageLength = ref(20);
 const tickets = createListManager({
@@ -62,7 +79,7 @@ const tickets = createListManager({
   transform: (data) => {
     for (const d of data) {
       d.class = {
-        "font-medium": !d._seen?.includes(userId),
+        "font-medium": !d._seen?.includes(authStore.userId),
       };
       d.onClick = {
         name: AGENT_PORTAL_TICKET,
@@ -81,31 +98,7 @@ const tickets = createListManager({
   },
 });
 
-// Chỉ set filter mặc định khi chưa có query trên URL (lần đầu vào trang)
-// Khi user xóa filter thủ công: URL sẽ có q="" → không ghi đè, tránh giật
-onMounted(() => {
-  if (route.query.q !== undefined) return; // user đã tự set hoặc xóa filter
 
-  if (isAdmin.value) {
-    // Admin: không filter, hiện tất cả
-    return;
-  }
-
-  // User thường: set mặc định Assigned To = user hiện tại
-  storage.value.clear();
-  add({
-    field: {
-      label: "Assigned To",
-      fieldname: "_assign",
-      fieldtype: "Small Text",
-      options: "",
-    },
-    fieldname: "_assign",
-    operator: "like",
-    value: userId.value,
-  });
-  apply();
-});
 
 
 const sortOptionsRes = createResource({

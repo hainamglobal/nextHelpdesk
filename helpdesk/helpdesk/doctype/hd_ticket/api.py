@@ -7,6 +7,7 @@ from pypika import Criterion, Order
 from helpdesk.consts import DEFAULT_TICKET_TEMPLATE
 from helpdesk.helpdesk.doctype.hd_ticket_template.api import get_one as get_template
 from helpdesk.utils import check_permissions, get_customer, is_agent
+from helpdesk.service.agent_service import AgentService
 
 
 @frappe.whitelist()
@@ -15,6 +16,16 @@ def new(doc, attachments=[]):
 	doc["via_customer_portal"] = bool(frappe.session.user)
 	d = frappe.get_doc(doc).insert()
 	d.create_communication_via_contact(d.description, attachments)
+	
+	# Tự động gán phiếu (Auto Assignment)
+	try:
+		agent_service = AgentService()
+		new_agent_email = agent_service.auto_assign_agent()
+		if new_agent_email:
+			d.assign_agent(new_agent_email)
+	except Exception as e:
+		frappe.log_error(title="Auto Assign New Ticket Error", message=str(e))
+		
 	return d
 
 

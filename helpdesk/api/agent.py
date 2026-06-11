@@ -11,6 +11,10 @@ def sent_invites(emails, send_welcome_mail_to_user=True):
     try:
         channel_service = RavenChannelService()
         
+        if isinstance(emails, str):
+            import json
+            emails = json.loads(emails)
+            
         for email in emails:
             if frappe.db.exists("User", email):
                 user = frappe.get_doc("User", email)
@@ -29,11 +33,14 @@ def sent_invites(emails, send_welcome_mail_to_user=True):
             doc = {"doctype": "HD Agent", "user": user.name , "channel_id": channel_id}
             new_agent = frappe.get_doc(doc).insert()
             created_agents.append(new_agent.as_dict())
-            return DefaultRes.res(200, ResponseMessage.SUCCESS, created_agents).to_dict()
+        return DefaultRes.res(200, ResponseMessage.SUCCESS, created_agents).to_dict()
+    except frappe.exceptions.PermissionError:
+        frappe.db.rollback()
+        raise CommonException(ErrorConfig.FORBIDDEN_ERROR)
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error("Lỗi sent_invites (HD Agent)", frappe.get_traceback())
-        raise CommonException(ErrorConfig.CREATE_AGENT_ERROR.throw(str(e)))
+        raise CommonException(ErrorConfig.CREATE_AGENT_ERROR)
 
 @frappe.whitelist()
 def delete_agent(name):
