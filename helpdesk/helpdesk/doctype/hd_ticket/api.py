@@ -8,6 +8,7 @@ from helpdesk.consts import DEFAULT_TICKET_TEMPLATE
 from helpdesk.helpdesk.doctype.hd_ticket_template.api import get_one as get_template
 from helpdesk.utils import check_permissions, get_customer, is_agent
 from helpdesk.service.agent_service import AgentService
+from helpdesk.service.ticket_service import TicketService
 
 
 @frappe.whitelist()
@@ -25,6 +26,13 @@ def new(doc, attachments=[]):
 			d.assign_agent(new_agent_email)
 	except Exception as e:
 		frappe.log_error(title="Auto Assign New Ticket Error", message=str(e))
+
+	# Gửi thông báo có phiếu mới sang nhóm Raven
+	try:
+		ticket_service = TicketService()
+		ticket_service.notify_raven_new_ticket(d.name)
+	except Exception as e:
+		frappe.log_error(title="Notify Raven New Ticket Error", message=str(e))
 		
 	return d
 

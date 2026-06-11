@@ -2,6 +2,7 @@ import frappe
 import requests
 from helpdesk.config.config_sites import get_nextgrp_develop_config
 from helpdesk.config.response.error_code import ErrorConfig
+from helpdesk.config.response.common_exception import CommonException
 from helpdesk.repository.hd_agent_channel_repository import insert_chanel_id
 
 
@@ -133,3 +134,28 @@ class RavenChannelService:
             return True
         except requests.exceptions.RequestException as e:
             frappe.throw(str(e))
+
+    def send_ticket_notification(self, ticket_name, subject, raised_by_email, raised_by_name):
+        send_message_url = f"{self.config['url']}/api/method/raven.api.raven_message.send_message"
+        
+        text = f"""<div style="border:1px solid #d1d5db;border-radius:12px;padding:16px;background:#ffffff;max-width:450px;font-family:Arial,sans-serif;"><div style="font-size:18px;font-weight:bold;color:#2563eb;margin-bottom:8px;">🎫 Phiếu hỗ trợ mới</div><div style="margin-bottom:8px;"><strong>Mã phiếu:</strong> {ticket_name}</div><div style="margin-bottom:8px;"><strong>Tiêu đề:</strong> {subject}</div><div style="margin-bottom:16px;"><strong>Người xử lý phiếu:</strong> <span data-type="userMention" class="mention" data-id="{raised_by_email}" data-label="{raised_by_name}">@{raised_by_name}</span></div><a href="http://hotro.nextgrp.vn/helpdesk/tickets/{ticket_name}" target="_blank" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:8px;font-weight:600;">Xem chi tiết phiếu hỗ trợ</a></div>"""
+
+        payload = {
+            "channel_id": self.channel_id,
+            "text": text,
+            "is_reply": 0,
+            "send_silently": False,
+            "workspace": "Raven"
+        }
+
+        try:
+            res = requests.post(send_message_url, json=payload, headers=self.config['headers'])
+            res.raise_for_status()
+            return True
+        except requests.exceptions.RequestException as e:
+            error_msg = ErrorConfig.API_CALL_ERROR.message.format(url=self.config['url'], error=str(e))
+            if e.response is not None:
+                error_msg += ErrorConfig.API_CALL_DETAIL.message.format(detail=e.response.text)
+            frappe.log_error(title=ErrorConfig.SEND_MESSAGE_LOG_TITLE.message, message=error_msg)
+            raise CommonException(ErrorConfig.SEND_MESSAGE_THROW)
+
