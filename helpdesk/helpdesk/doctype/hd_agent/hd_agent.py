@@ -13,13 +13,12 @@ class HDAgent(Document):
 		self.name = self.user
 		self.set_user_roles()
 
+	def after_insert(self):
+		self.set_user_roles()
+
 	def set_user_roles(self):
 		user = frappe.get_doc("User", self.user)
-
-		for role in ["Agent"]:
-			user.append("roles", {"role": role})
-
-		user.save()
+		user.add_roles("Agent")
 
 	def on_update(self):
 		if self.has_value_changed("is_active"):
@@ -41,7 +40,14 @@ class HDAgent(Document):
 			self.add_to_support_rotations()
 
 	def on_trash(self):
+		frappe.only_for("System Manager")
 		self.remove_from_support_rotations()
+		self.remove_user_roles()
+
+	def remove_user_roles(self):
+		if frappe.db.exists("User", self.user):
+			user = frappe.get_doc("User", self.user)
+			user.remove_roles("Agent")
 
 	def add_to_support_rotations(self, group=None):
 		"""

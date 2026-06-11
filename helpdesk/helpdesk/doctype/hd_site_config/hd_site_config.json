@@ -4,18 +4,12 @@
  "creation": "2026-06-06 17:00:18.215001",
  "doctype": "DocType",
  "engine": "InnoDB",
-  "field_order": ["organization", "site", "site_url", "api_key", "api_secret"],
+  "field_order": ["organization","site_url", "api_key", "api_secret"],
  "fields": [
     {
       "fieldname": "organization",
       "fieldtype": "Data",
       "label": "Organization"
-    },
-    {
-      "fieldname": "site",
-      "fieldtype": "Data",
-      "label": "Site",
-      "unique": 1
     },
     {
       "fieldname": "site_url",

@@ -124,13 +124,14 @@ export function useFilter(doctype: string) {
    * Can be used for APIs
    */
   function transformIn(f: Filter) {
-    if (f.fieldname === "_assign") {
-      f.operator = f.operator === "is" ? "like" : "not like";
+    const clone = { ...f };
+    if (clone.fieldname === "_assign") {
+      clone.operator = clone.operator === "is" ? "like" : "not like";
     }
-    if (f.operator.includes("like")) {
-      f.value = `%${f.value}%`;
+    if (clone.operator.includes("like") && !clone.value.startsWith("%")) {
+      clone.value = `%${clone.value}%`;
     }
-    return f;
+    return clone;
   }
 
   /**

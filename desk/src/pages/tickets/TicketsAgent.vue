@@ -32,8 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import { createResource, usePageMeta, Button, Dropdown } from "frappe-ui";
 import { AGENT_PORTAL_TICKET } from "@/router";
 import { socket } from "@/socket";
@@ -47,8 +48,26 @@ import TicketsAgentList from "./TicketsAgentList.vue";
 import PresetFilters from "./PresetFilters.vue";
 
 const { t } = useI18n();
-const { userId } = useAuthStore();
-const { getArgs } = useFilter("HD Ticket");
+const route = useRoute();
+const authStore = useAuthStore();
+const { getArgs, storage, add, apply, fields } = useFilter("HD Ticket");
+
+// Chỉ set filter mặc định khi chưa có query trên URL (lần đầu vào trang)
+if (route.query.q === undefined && !authStore.isAdmin) {
+  storage.value.clear();
+  add({
+    field: {
+      label: "Assigned To",
+      fieldname: "_assign",
+      fieldtype: "Link",
+      options: "HD Agent",
+    },
+    fieldname: "_assign",
+    operator: "is",
+    value: authStore.userId,
+  });
+}
+
 const { get: getOrder, set: setOrder } = useOrder();
 const pageLength = ref(20);
 const tickets = createListManager({
@@ -60,7 +79,7 @@ const tickets = createListManager({
   transform: (data) => {
     for (const d of data) {
       d.class = {
-        "font-medium": !d._seen?.includes(userId),
+        "font-medium": !d._seen?.includes(authStore.userId),
       };
       d.onClick = {
         name: AGENT_PORTAL_TICKET,
@@ -73,11 +92,14 @@ const tickets = createListManager({
         outgoing: d.count_msg_outgoing,
         comments: d.count_comment,
       };
-      d.source = d.via_customer_portal ? "Customer portal" : "Email";
+      d.source = d.via_customer_portal ? "Cổng khách hàng" : "Email";
     }
     return data;
   },
 });
+
+
+
 
 const sortOptionsRes = createResource({
   url: "helpdesk.extends.doc.sort_options",
@@ -105,78 +127,78 @@ const columns = [
     text: "text-sm",
   },
   {
-    label: "Subject",
+    label: "Tiêu đề",
     key: "subject",
     width: "w-96",
     text: "text-gray-900",
   },
   {
-    label: "Status",
+    label: "Trạng thái",
     key: "status",
     width: "w-20",
   },
   {
-    label: "Priority",
+    label: "Ưu tiên",
     key: "priority",
     width: "w-32",
   },
   {
-    label: "Type",
+    label: "Loại",
     key: "ticket_type",
     width: "w-36",
   },
   {
-    label: "Team",
+    label: "Nhóm",
     key: "agent_group",
     width: "w-36",
   },
   {
-    label: "Contact",
+    label: "Liên hệ",
     key: "contact",
     width: "w-36",
   },
   {
-    label: "Agreement status",
+    label: "Thời hạn xử lý",
     key: "agreement_status",
     width: "w-36",
   },
   {
-    label: "First response",
+    label: "Phản hồi đầu tiên",
     key: "response_by",
     width: "w-32",
   },
   {
-    label: "Resolution",
+    label: "Giải quyết",
     key: "resolution_by",
     width: "w-32",
   },
   {
-    label: "Customer",
+    label: "Khách hàng",
     key: "customer",
     width: "w-36",
   },
   {
-    label: "Source",
+    label: "Nguồn",
     key: "source",
     width: "w-36",
   },
   {
-    label: "Assignee",
+    label: "Người xử lý",
     key: "assignee",
     width: "w-40",
   },
   {
-    label: "Conversation",
+    label: "Hội thoại",
     key: "conversation",
     width: "w-28",
   },
   {
-    label: "Last modified",
+    label: "Cập nhật lần cuối",
     key: "modified",
     width: "w-32",
   },
   {
-    label: "Created",
+    label: "Ngày tạo",
     key: "creation",
     width: "w-36",
   },

@@ -1,27 +1,60 @@
 <template>
 	<div>
 		<Dialog
-			:options="{ title: 'Add Agents' }"
+			:options="{ title: 'Thêm nhân viên' }"
 			:show="show"
 			@close="close()"
 		>
 			<template #body-content>
 				<div class="space-y-3">
-					<form
-						@submit.prevent="onSubmit"
-						class="flex flex-row space-x-2 items-center"
+					<form 
+						class="flex flex-row space-x-2 items-start relative w-full"
+						@submit.prevent="() => { if(currentInputIsValidEmail) { addToInviteQueue(searchInput); clearSearchInput(); } }"
 					>
-						<Input
-							id="searchInput"
-							class="w-full"
-							type="text"
-							v-model="searchInput"
-							placeholder="Type emails"
-							@input="(val) => onSearchInputChange(val)"
-						/>
+						<div class="w-full">
+							<Popover class="w-full">
+							<template #target="{ open: openPopover, close: closePopover }">
+								<div id="inputWrapperDiv" ref="inputWrapperRef" class="w-full">
+									<Input
+										id="searchInput"
+										class="w-full"
+										type="text"
+										v-model="searchInput"
+										placeholder="Nhập email..."
+										@input="(val) => { onSearchInputChange(val); openPopover(); }"
+										@focus="() => { updateDropdownWidth(); onInputFocus(); openPopover(); }"
+										@click="() => { updateDropdownWidth(); onInputFocus(); openPopover(); }"
+										@blur="() => { onInputBlur(); closePopover(); }"
+									/>
+								</div>
+							</template>
+							<template #body="{ close: closePopover }">
+								<div 
+									v-show="emailOptions.length > 0"
+									class="bg-white border rounded shadow-lg z-[9999] max-h-48 overflow-y-auto overflow-x-hidden mt-1"
+									:style="{ width: dropdownWidth, minWidth: dropdownWidth, maxWidth: dropdownWidth }"
+								>
+									<div 
+										v-for="opt in emailOptions" 
+										:key="opt.value"
+										class="px-3 py-2 cursor-pointer hover:bg-gray-100 flex items-center"
+										@mousedown.prevent="() => { selectEmail(opt.value); closePopover() }"
+									>
+										<Avatar v-if="opt.user_image" :image="opt.user_image" size="sm" class="mr-2" />
+										<Avatar v-else :label="opt.label" size="sm" class="mr-2" />
+										<div class="flex flex-col text-sm leading-tight overflow-hidden">
+											<span class="font-medium truncate">{{ opt.full_name || opt.value }}</span>
+											<span class="text-gray-500 text-xs truncate" v-if="opt.full_name">{{ opt.value }}</span>
+										</div>
+									</div>
+								</div>
+							</template>
+						</Popover>
+						</div>
 						<Button
 							appearance="primary"
 							type="submit"
+							class="shrink-0"
 							:disabled="!currentInputIsValidEmail"
 							@click="
 								() => {
@@ -30,7 +63,7 @@
 								}
 							"
 						>
-							Add
+							Thêm
 						</Button>
 					</form>
 					<div
@@ -67,15 +100,15 @@
 					@click="sentInvites()"
 					class="mr-2"
 					:loading="$resources.sentInvites.loading"
-					>Send Invites</Button
+					>Gửi lời mời</Button
 				>
-				<Button appearance="secondary" class="mr-2" @click="close()">Cancel</Button>
+				<Button appearance="secondary" class="mr-2" @click="close()">Hủy</Button>
 				<div class="grow">
 					<Button
 						@click="removeAllEmailFromQueue()"
 						v-if="inviteQueue.length > 1"
 					>
-						Clear All
+						Xóa tất cả
 					</Button>
 				</div>
 			</template>
@@ -84,8 +117,10 @@
 </template>
 
 <script>
-import { Dialog, Input, FeatherIcon } from "frappe-ui"
-import { ref } from "@vue/reactivity"
+import { Dialog, Input, FeatherIcon, Avatar, Popover } from "frappe-ui"
+import { ref, watch } from "vue"
+import { showGlobalError } from "@/utils"
+import { useAgentStore } from "@/stores/agent"
 
 export default {
 	name: "AddNewAgentsDialog",
@@ -94,17 +129,41 @@ export default {
 		Dialog,
 		Input,
 		FeatherIcon,
+		Avatar,
+		Popover,
 	},
-	setup() {
+	setup(props) {
 		const searchInput = ref("")
 		const inviteQueue = ref([])
+		const emailOptions = ref([])
+		const showDropdown = ref(false)
+		const inputWrapperRef = ref(null)
+		const dropdownWidth = ref("100%")
 
 		const currentInputIsValidEmail = ref(false)
+
+		const updateDropdownWidth = () => {
+			const inputEl = document.getElementById("inputWrapperDiv")
+			if (inputEl) {
+				dropdownWidth.value = inputEl.offsetWidth + "px"
+			}
+		}
+
+		watch(() => props.show, (newVal) => {
+			if (!newVal) {
+				showDropdown.value = false;
+			}
+		});
 
 		return {
 			searchInput,
 			inviteQueue,
 			currentInputIsValidEmail,
+			emailOptions,
+			showDropdown,
+			inputWrapperRef,
+			dropdownWidth,
+			updateDropdownWidth,
 		}
 	},
 	methods: {
@@ -112,11 +171,44 @@ export default {
 			let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 			return emailRegex.test(val)
 		},
+		async searchEmailsFromAPI(query) {
+			const agentStore = useAgentStore()
+			try {
+				let res = await agentStore.searchUser(query || "")
+				if (res && res.data) {
+					this.emailOptions = res.data.map(u => ({
+						label: u.full_name ? `${u.full_name} (${u.email})` : u.email,
+						value: u.email,
+						full_name: u.full_name,
+						user_image: u.user_image
+					}))
+					if (this.emailOptions.length > 0) {
+						this.showDropdown = true
+					}
+				}
+			} catch (err) {
+				console.error("Search failed", err)
+			}
+		},
+		onInputFocus() {
+			this.searchEmailsFromAPI(this.searchInput)
+		},
+		onInputBlur() {
+			// We use mousedown.prevent on the items to avoid blur triggering before select
+			this.showDropdown = false
+		},
+		selectEmail(email) {
+			this.addToInviteQueue(email)
+			this.clearSearchInput()
+		},
 		onSearchInputChange(val) {
 			val = val.replaceAll(" ", "")
 
 			if (val == "") {
 				document.getElementById("searchInput").value = ""
+				this.showDropdown = false
+				this.emailOptions = []
+				this.searchEmailsFromAPI("") // Fetch defaults again
 				return
 			}
 
@@ -142,6 +234,8 @@ export default {
 			})
 			if (clearInputFlag) {
 				this.clearSearchInput()
+			} else {
+				this.searchEmailsFromAPI(val)
 			}
 		},
 		addToInviteQueue(email) {
@@ -156,13 +250,18 @@ export default {
 		clearSearchInput() {
 			this.currentInputIsValidEmail = false
 			this.searchInput = ""
+			this.showDropdown = false
 
 			const input = document.getElementById("searchInput")
-			input.value = ""
-			input.focus()
+			if (input) {
+				input.value = ""
+				input.focus()
+			}
 		},
 		close() {
 			this.searchInput = ""
+			this.showDropdown = false
+			this.emailOptions = []
 			this.inviteQueue = []
 			this.$emit("close")
 		},
@@ -182,27 +281,24 @@ export default {
 					this.inviteQueue = []
 
 					this.$toast({
-						title: "Invites Sent Successfully!",
+						title: "Gửi lời mời thành công!",
 						icon: "check",
 						iconClasses: "text-green-500"
 					})
 
+					this.$emit("success", res)
 					this.close()
 				},
 				onError: (err) => {
 					if (err.exc_type == "PaywallReachedError") {
 						this.$toast({
-							title: "Paywall Reached!",
-							text: "You have reached the maximum number of agents you can add. Please upgrade your plan to add more agents.",
+							title: "Đạt giới hạn nhân viên!",
+							text: "Bạn đã đạt số lượng nhân viên tối đa. Vui lòng nâng cấp gói để thêm nhiều nhân viên hơn.",
 							icon: "x",
 							iconClasses: "text-red-500",
 						})
 					} else {
-						this.$toast({
-							title: "Error Sending Invites!",
-							icon: "x",
-							iconClasses: "text-red-500",
-						})
+						showGlobalError(err);
 					}
 				},
 			}

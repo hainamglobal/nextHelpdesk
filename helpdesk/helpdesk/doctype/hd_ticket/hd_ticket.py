@@ -74,6 +74,11 @@ class HDTicket(Document):
 		QBTeamMember = frappe.qb.DocType("HD Team Member")
 		QBTicket = frappe.qb.DocType("HD Ticket")
 		user = frappe.session.user
+
+		# Administrator và System Manager xem được tất cả ticket
+		if user == "Administrator" or "System Manager" in frappe.get_roles(user):
+			return query
+
 		customer = get_customer(user)
 		conditions = (
 			[

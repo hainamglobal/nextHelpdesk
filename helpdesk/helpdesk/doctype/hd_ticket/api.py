@@ -7,6 +7,7 @@ from pypika import Criterion, Order
 from helpdesk.consts import DEFAULT_TICKET_TEMPLATE
 from helpdesk.helpdesk.doctype.hd_ticket_template.api import get_one as get_template
 from helpdesk.utils import check_permissions, get_customer, is_agent
+from helpdesk.service.agent_service import AgentService
 
 
 @frappe.whitelist()
@@ -15,6 +16,16 @@ def new(doc, attachments=[]):
 	doc["via_customer_portal"] = bool(frappe.session.user)
 	d = frappe.get_doc(doc).insert()
 	d.create_communication_via_contact(d.description, attachments)
+	
+	# Tự động gán phiếu (Auto Assignment)
+	try:
+		agent_service = AgentService()
+		new_agent_email = agent_service.auto_assign_agent()
+		if new_agent_email:
+			d.assign_agent(new_agent_email)
+	except Exception as e:
+		frappe.log_error(title="Auto Assign New Ticket Error", message=str(e))
+		
 	return d
 
 
@@ -25,6 +36,8 @@ def get_one(name):
 	QBTicket = frappe.qb.DocType("HD Ticket")
 
 	_is_agent = is_agent()
+	user = frappe.session.user
+	is_admin_or_system_manager = user == "Administrator" or "System Manager" in frappe.get_roles(user)
 
 	query = (
 		frappe.qb.from_(QBTicket)
@@ -33,7 +46,7 @@ def get_one(name):
 		.limit(1)
 	)
 
-	if not _is_agent:
+	if not _is_agent and not is_admin_or_system_manager:
 		query = query.where(get_customer_criteria())
 
 	ticket = query.run(as_dict=True)

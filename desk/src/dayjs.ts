@@ -1,6 +1,7 @@
 import d from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/vi";
 
 declare module "dayjs" {
   interface Dayjs {
@@ -13,6 +14,8 @@ declare module "dayjs" {
 
 d.extend(localizedFormat);
 d.extend(relativeTime);
+d.locale("vi");
+
 d.extend(function (_, cls) {
   cls.prototype.short = function () {
     return this.format("MMM D, h:mm A");

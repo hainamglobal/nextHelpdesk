@@ -1,6 +1,6 @@
 import { computed, ComputedRef } from "vue";
 import { defineStore } from "pinia";
-import { createListResource } from "frappe-ui";
+import { createListResource, createResource } from "frappe-ui";
 
 type Agent = {
   name: string;
@@ -9,6 +9,8 @@ type Agent = {
   user: string;
   user_image: string;
 };
+
+import { showGlobalError } from "@/utils";
 
 export const useAgentStore = defineStore("agent", () => {
   const d__ = createListResource({
@@ -29,8 +31,33 @@ export const useAgentStore = defineStore("agent", () => {
     }))
   );
 
+  const deleteAgentResource = createResource({
+    url: "helpdesk.api.agent.delete_agent",
+  });
+
+  const deleteAgent = (name: string) => {
+    return deleteAgentResource.submit({ name })
+      .then(() => {
+        d__.reload(); // also reload store's data if needed
+      })
+      .catch((err: any) => {
+        showGlobalError(err);
+        throw err;
+      });
+  };
+
+  const searchUserResource = createResource({
+    url: "helpdesk.api.agent.get_list_email",
+  });
+
+  const searchUser = (query: string) => {
+    return searchUserResource.submit({ query });
+  };
+
   return {
     dropdown,
     options,
+    deleteAgent,
+    searchUser,
   };
 });

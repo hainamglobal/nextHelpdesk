@@ -3,6 +3,7 @@
     <RouterView class="antialiased" />
     <Toasts />
     <KeymapDialog />
+    <GlobalErrorDialog />
   </span>
 </template>
 
@@ -12,6 +13,7 @@ import { Toasts } from "frappe-ui";
 import { createToast } from "@/utils";
 import { useConfigStore } from "@/stores/config";
 import KeymapDialog from "@/pages/KeymapDialog.vue";
+import GlobalErrorDialog from "@/components/desk/global/GlobalErrorDialog.vue";
 
 useConfigStore();
 
