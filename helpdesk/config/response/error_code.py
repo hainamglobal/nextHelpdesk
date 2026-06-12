@@ -10,6 +10,12 @@ class ErrorConfig(Enum):
     ADD_MEMBER_LOG_TITLE = (StatusCode.INTERNAL_SERVER_ERROR, "MEMBER-ERR-500", "Lỗi thêm User vào Raven Channel")
     ADD_MEMBER_THROW = (StatusCode.INTERNAL_SERVER_ERROR, "MEMBER-ERR-501", "Đã có lỗi xảy ra khi thêm thành viên vào Channel trên site Develop. Vui lòng kiểm tra Error Log.")
 
+    SEND_MESSAGE_LOG_TITLE = (StatusCode.INTERNAL_SERVER_ERROR, "MSG-ERR-500", "Lỗi gửi thông báo phiếu mới sang Raven")
+    SEND_MESSAGE_THROW = (StatusCode.INTERNAL_SERVER_ERROR, "MSG-ERR-501", "Đã có lỗi xảy ra khi gửi thông báo sang nhóm hỗ trợ.")
+
+    # ticket ko tồn tại
+    TICKET_NOT_EXIST = (StatusCode.NOT_FOUND ,"TICKET-ERR-001" ,"Phiếu hỗ trợ không tồn tại" )
+
     # agent ko tồn tại
     AGENT_NOT_EXIST = (StatusCode.NOT_FOUND ,"AGENT-ERR-001" ,"Nhân viên không tôn tại" )
     
