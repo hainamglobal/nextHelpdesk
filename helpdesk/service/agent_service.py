@@ -2,12 +2,12 @@ import frappe
 from helpdesk.config.response.error_code import ErrorConfig
 from helpdesk.config.response import CommonException
 from helpdesk.repository.agent_repository import delete_agent_repository, check_name_is_exist, AgentRepository
-from helpdesk.service.external_channel_service import RavenChannelService
+from helpdesk.service.external_channel_service import HDRavenChannelService
 
 
 class AgentService:
     def __init__(self):
-        self.raven_service = RavenChannelService()
+        self.raven_service = HDRavenChannelService()
         self.agent_repo = AgentRepository()
 
     def get_list_email(self, query: str):

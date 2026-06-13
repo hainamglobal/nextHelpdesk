@@ -26,3 +26,12 @@ def insert_chanel_id(channel_id, channel_agent_name):
     frappe.db.commit()
 
     return doc.channel_id
+
+def get_channel_id(channel_name):
+    # Lấy channel_id từ DB local dựa theo channel_name
+    return frappe.db.get_value("HD Channel Agent", {"channel_agent_name": channel_name}, "channel_id")
+
+
+def count_channel_id(channel_name) :
+    count = frappe.db.count("HD Channel Agent", {"channel_agent_name":channel_name})
+    return count
