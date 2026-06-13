@@ -46,11 +46,29 @@ class AgentService:
             raise CommonException(ErrorConfig.AGENT_NOT_EXIST)
 
     def reassign_tickets_from_deleted_agent(self, old_agent_email: str, open_tickets: list):
+        old_agent_name = frappe.db.get_value("User", {"email": old_agent_email}, "full_name") or old_agent_email
+
         for ticket_name in open_tickets:
             try:
                 new_agent_email = self.auto_assign_agent()
                 if new_agent_email and old_agent_email:
                     self.agent_repo.reassign_ticket(ticket_name, old_agent_email, new_agent_email)
+
+                    # Gửi thông báo chuyển phiếu vào nhóm Raven
+                    try:
+                        new_agent_name = frappe.db.get_value("User", {"email": new_agent_email}, "full_name") or new_agent_email
+                        subject = frappe.db.get_value("HD Ticket", ticket_name, "subject") or ticket_name
+                        self.raven_service.send_reassign_notification(
+                            ticket_name=ticket_name,
+                            subject=subject,
+                            old_agent_email=old_agent_email,
+                            old_agent_name=old_agent_name,
+                            new_agent_email=new_agent_email,
+                            new_agent_name=new_agent_name
+                        )
+                    except Exception as e:
+                        frappe.log_error(title="Raven Reassign Notify Error", message=str(e))
+
             except frappe.DoesNotExistError:
                 self.agent_repo.delete_orphaned_todo(ticket_name)
             except CommonException:

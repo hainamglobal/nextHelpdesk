@@ -17,15 +17,15 @@ class TicketService:
         if not ticket_info:
             raise CommonException(ErrorConfig.TICKET_NOT_EXIST)
             
-        raised_by_email = ticket_info.get("raised_by")
-        raised_by_name = ticket_info.get("raised_by_name")
+        assigned_email = ticket_info.get("assigned_email")
+        assigned_name = ticket_info.get("assigned_name")
         
         # Gửi notification qua RavenChannelService
         result = self.raven_service.send_ticket_notification(
             ticket_name=ticket_info.get("name"),
             subject=ticket_info.get("subject"),
-            raised_by_email=raised_by_email,
-            raised_by_name=raised_by_name
+            assigned_email=assigned_email,
+            assigned_name=assigned_name
         )
         
         return result

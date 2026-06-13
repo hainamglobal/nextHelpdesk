@@ -16,18 +16,26 @@ export const useTicketTypeStore = defineStore("ticketType", () => {
 		pageLength: 99999,
 	});
 
+	const labelMap: Record<string, string> = {
+		Bug: "Lỗi",
+		Incident: "Sự cố",
+		Question: "Câu hỏi",
+		Unspecified: "Chưa xác định",
+	};
+
 	const options: ComputedRef<Array<TicketType>> = computed(
 		() => d__.list?.data || []
 	);
 	const dropdown = computed(() =>
 		options.value.map((o) => ({
-			label: o.name,
+			label: labelMap[o.name] || o.name,
 			value: o.name,
 		}))
 	);
 
 	return {
 		dropdown,
+		labelMap,
 		options,
 	};
 });

@@ -4,7 +4,7 @@
       <template #right>
         <Button
           v-if="showReopenButton"
-          label="Reopen"
+          label="Mở lại"
           theme="gray"
           variant="solid"
           @click="setValue.submit({ fieldname: 'status', value: 'Open' })"
@@ -15,7 +15,7 @@
         </Button>
         <Button
           v-if="showResolveButton"
-          label="Resolve"
+          label="Đã giải quyết"
           theme="gray"
           variant="solid"
           @click="showFeedbackDialog = !showFeedbackDialog"
@@ -40,7 +40,7 @@
       >
         <template #bottom-right>
           <Button
-            label="Send"
+            label="Gửi"
             theme="gray"
             variant="solid"
             :disabled="$refs.editor.editor.isEmpty || send.loading"
@@ -80,7 +80,7 @@ const ticket = createResource({
 });
 provide(ITicket, ticket);
 const editor = ref(null);
-const placeholder = "Type a message";
+const placeholder = "Nhập tin nhắn";
 const editorContent = ref("");
 const attachments = ref([]);
 const showFeedbackDialog = ref(false);
