@@ -1,13 +1,13 @@
 import frappe
 from helpdesk.repository.ticket_repository import TicketRepository
-from helpdesk.service.external_channel_service import RavenChannelService
+from helpdesk.service.external_channel_service import HDRavenChannelService
 from helpdesk.config.response.error_code import ErrorConfig
 from helpdesk.config.response.common_exception import CommonException
 
 class TicketService:
     def __init__(self):
         self.ticket_repo = TicketRepository()
-        self.raven_service = RavenChannelService()
+        self.raven_service = HDRavenChannelService()
         
     def notify_raven_new_ticket(self, ticket_name: str):
         """

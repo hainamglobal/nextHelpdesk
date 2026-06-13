@@ -1,6 +1,6 @@
 import frappe
 from helpdesk.service.agent_service import AgentService
-from helpdesk.service.external_channel_service import RavenChannelService
+from helpdesk.service.external_channel_service import HDRavenChannelService
 from helpdesk.config.response import DefaultRes, ResponseMessage, CommonException
 from helpdesk.config.response.error_code import ErrorConfig
 
@@ -9,7 +9,7 @@ from helpdesk.config.response.error_code import ErrorConfig
 def sent_invites(emails, send_welcome_mail_to_user=True):
     created_agents = []
     try:
-        channel_service = RavenChannelService()
+        channel_service = HDRavenChannelService()
         
         if isinstance(emails, str):
             import json

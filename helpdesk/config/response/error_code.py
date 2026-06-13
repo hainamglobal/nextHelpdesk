@@ -25,6 +25,9 @@ class ErrorConfig(Enum):
     # lỗi khi tạo agent
     CREATE_AGENT_ERROR = (StatusCode.INTERNAL_SERVER_ERROR, "AGENT-ERR-002", "Đã xảy ra lỗi trong quá trình tạo Agent")
 
+    #Lỗi đã tồn tại channel
+    CHANNEL_IS_EXIST = (StatusCode.CONFLICT , "CHANNEL-ERR-001" , "Channel đã tồn tại ")
+
     def __init__(self, status, error_code, message):
         self.status = status
         self.error_code = error_code
