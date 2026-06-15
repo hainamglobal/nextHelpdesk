@@ -147,16 +147,11 @@
             </template>
             <template #bottom-right>
               <Button
-                :label="
-                  {
-                    Comment: 'Ghi chú',
-                    Response: 'Gửi',
-                  }[mode]
-                "
+                :label="mode === Mode.Comment ? 'Ghi chú' : 'Gửi'"
                 theme="gray"
                 variant="solid"
-                :disabled="$refs.editor.editor.isEmpty || resource.loading"
-                @click="() => resource.submit()"
+                :disabled="$refs.editor?.editor?.isEmpty || resource?.loading"
+                @click="() => resource?.submit()"
               />
             </template>
           </TicketTextEditor>
@@ -284,10 +279,7 @@ const response = createResource({
 });
 
 const resource = computed(() => {
-  return {
-    Comment: comment,
-    Response: response,
-  }[mode.value];
+  return mode.value === Mode.Comment ? comment : response;
 });
 
 function clear() {

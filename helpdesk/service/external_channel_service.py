@@ -26,6 +26,9 @@ class HDRavenChannelService:
             
         self.channel_id = channel_id
 
+        if not self.get_member_from_email("adminhotro@gmail.com"):
+            self.add_member_to_channel("adminhotro@gmail.com")
+
     @run_as_admin
     def create_raven_channel(self):
         try:
@@ -45,10 +48,10 @@ class HDRavenChannelService:
     def add_member_to_channel(self, member_email):
         try:
             import raven.api.raven_channel_member
-            frappe.db.after_commit.add(lambda: raven.api.raven_channel_member.add_channel_members(
+            raven.api.raven_channel_member.add_channel_members(
                 channel_id=self.channel_id,
                 members=[member_email]
-            ))
+            )
             return True
 
         except Exception as e:
@@ -80,10 +83,10 @@ class HDRavenChannelService:
     
         try:
             import raven.api.raven_channel_member
-            frappe.db.after_commit.add(lambda: raven.api.raven_channel_member.delete_channel_member(
+            raven.api.raven_channel_member.delete_channel_member(
                 channel_id=self.channel_id,
                 member_id=member_id
-            ))
+            )
             return True
         except Exception as e:
             frappe.throw(str(e))
@@ -102,12 +105,17 @@ class HDRavenChannelService:
 
         try:
             import raven.api.raven_message
-            frappe.db.after_commit.add(lambda: raven.api.raven_message.send_message(
-                channel_id=self.channel_id,
-                text=text,
-                is_reply=False,
-                send_silently=False
-            ))
+            original_user = getattr(frappe.session, "user", "Guest")
+            try:
+                frappe.set_user("adminhotro@gmail.com")
+                raven.api.raven_message.send_message(
+                    channel_id=self.channel_id,
+                    text=text,
+                    is_reply=False,
+                    send_silently=False
+                )
+            finally:
+                frappe.set_user(original_user)
             return True
         except Exception as e:
             frappe.log_error(title=ErrorConfig.SEND_MESSAGE_LOG_TITLE.message, message=str(e))
@@ -127,12 +135,17 @@ class HDRavenChannelService:
 
         try:
             import raven.api.raven_message
-            frappe.db.after_commit.add(lambda: raven.api.raven_message.send_message(
-                channel_id=self.channel_id,
-                text=text,
-                is_reply=False,
-                send_silently=False
-            ))
+            original_user = getattr(frappe.session, "user", "Guest")
+            try:
+                frappe.set_user("adminhotro@gmail.com")
+                raven.api.raven_message.send_message(
+                    channel_id=self.channel_id,
+                    text=text,
+                    is_reply=False,
+                    send_silently=False
+                )
+            finally:
+                frappe.set_user(original_user)
             return True
         except Exception as e:
             frappe.log_error(title="Raven Reassign Notification Error", message=str(e))
