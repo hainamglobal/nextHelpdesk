@@ -77,7 +77,7 @@ class AgentService:
     def auto_assign_agent(self):
         agent_user = self.agent_repo.get_agent_for_assignment()
         if not agent_user:
-            raise CommonException(ErrorConfig.AGENT_NOT_EXIST.throw("Không tìm thấy Agent nào khả dụng để gán phiếu."))
+            ErrorConfig.AT_LEAST_ONE_AGENT.throw()
         return agent_user
 
 
