@@ -14,7 +14,7 @@ def check_permissions(doctype, parent):
 	user = frappe.session.user
 
 	# Administrator và System Manager được phép truy cập tất cả
-	if user == "Administrator" or "System Manager" in frappe.get_roles(user):
+	if user == "Administrator" or "System Manager" in frappe.get_roles(user) or "Agent Manager" in frappe.get_roles(user):
 		return
 
 	permissions = ("select", "read")
