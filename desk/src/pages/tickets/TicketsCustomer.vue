@@ -72,17 +72,17 @@ const columns = [
     width: "w-12",
   },
   {
-    label: "Subject",
+    label: "Tiêu đề",
     key: "subject",
     width: "w-96",
   },
   {
-    label: "Status",
+    label: "Trạng thái",
     key: "status",
     width: "w-32",
   },
   {
-    label: "Created",
+    label: "Ngày tạo",
     key: "creation",
     width: "w-32",
   },
@@ -106,24 +106,24 @@ const tickets = createListManager({
 });
 
 const ACTIVE_TICKET_TYPES = ["Open", "Replied"];
-const dropdownTitle = ref("All tickets");
+const dropdownTitle = ref("Tất cả phiếu");
 const dropdownOptions = [
   {
-    label: "All tickets",
+    label: "Tất cả phiếu",
     onClick() {
-      filter("All tickets", { status: undefined });
+      filter("Tất cả phiếu", { status: undefined });
     },
   },
   {
-    label: "Open tickets",
+    label: "Phiếu đang mở",
     onClick() {
-      filter("Open tickets", { status: ["in", ACTIVE_TICKET_TYPES] });
+      filter("Phiếu đang mở", { status: ["in", ACTIVE_TICKET_TYPES] });
     },
   },
   {
-    label: "Closed tickets",
+    label: "Phiếu đã đóng",
     onClick() {
-      filter("Closed tickets", { status: ["not in", ACTIVE_TICKET_TYPES] });
+      filter("Phiếu đã đóng", { status: ["not in", ACTIVE_TICKET_TYPES] });
     },
   },
 ];
@@ -142,11 +142,12 @@ function filter(title: string, filters: Record<string, any>) {
 }
 
 function transformStatus(status: string) {
-  switch (status) {
-    case "Replied":
-      return "Awaiting reply";
-    default:
-      return status;
-  }
+  const statusMap: Record<string, string> = {
+    Open: "Đang mở",
+    Replied: "Chờ phản hồi",
+    Resolved: "Đã giải quyết",
+    Closed: "Đã đóng",
+  };
+  return statusMap[status] || status;
 }
 </script>

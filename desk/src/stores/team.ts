@@ -13,19 +13,25 @@ export const useTeamStore = defineStore("team", () => {
 		pageLength: 99999,
 	});
 
+	const labelMap: Record<string, string> = {
+		"Billing": "Thanh toán",
+		"Product Experts": "Chuyên gia sản phẩm",
+	};
+
 	const options: ComputedRef<Array<Team>> = computed(
 		() => d__.list?.data || []
 	);
 
 	const dropdown = computed(() =>
 		options.value.map((i) => ({
-			label: i.name,
+			label: labelMap[i.name] || i.name,
 			value: i.name,
 		}))
 	);
 
 	return {
 		dropdown,
+		labelMap,
 		options,
 	};
 });

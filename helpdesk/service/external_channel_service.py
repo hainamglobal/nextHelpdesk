@@ -26,6 +26,9 @@ class HDRavenChannelService:
             
         self.channel_id = channel_id
 
+        if not self.get_member_from_email("adminhotro@gmail.com"):
+            self.add_member_to_channel("adminhotro@gmail.com")
+
     @run_as_admin
     def create_raven_channel(self):
         try:
@@ -89,24 +92,63 @@ class HDRavenChannelService:
             frappe.throw(str(e))
 
     @run_as_admin
-    def send_ticket_notification(self, ticket_name, subject, raised_by_email, raised_by_name):
+    def send_ticket_notification(self, ticket_name, subject, assigned_email, assigned_name):
         site_url = frappe.utils.get_url()
         ticket_link = f"{site_url}/helpdesk/tickets/{ticket_name}"
         
-        text = f"""<div style="border:1px solid #d1d5db;border-radius:12px;padding:16px;background:#ffffff;max-width:450px;font-family:Arial,sans-serif;"><div style="font-size:18px;font-weight:bold;color:#2563eb;margin-bottom:8px;">🎫 Phiếu hỗ trợ mới</div><div style="margin-bottom:8px;"><strong>Mã phiếu:</strong> {ticket_name}</div><div style="margin-bottom:8px;"><strong>Tiêu đề:</strong> {subject}</div><div style="margin-bottom:16px;"><strong>Người xử lý phiếu:</strong> <span data-type="userMention" class="mention" data-id="{raised_by_email}" data-label="{raised_by_name}">@{raised_by_name}</span></div><a href="{ticket_link}" target="_blank" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:8px;font-weight:600;">Xem chi tiết phiếu hỗ trợ</a></div>"""
+        if assigned_email:
+            handler_text = f"""<span data-type="userMention" class="mention" data-id="{assigned_email}" data-label="{assigned_name}">@{assigned_name}</span>"""
+        else:
+            handler_text = f"""<strong>{assigned_name}</strong>"""
+            
+        text = f"""<div style="border:1px solid #d1d5db;border-radius:12px;padding:16px;background:#ffffff;max-width:450px;font-family:Arial,sans-serif;"><div style="font-size:18px;font-weight:bold;color:#2563eb;margin-bottom:8px;">🎫 Phiếu hỗ trợ mới</div><div style="margin-bottom:8px;"><strong>Mã phiếu:</strong> {ticket_name}</div><div style="margin-bottom:8px;"><strong>Tiêu đề:</strong> {subject}</div><div style="margin-bottom:16px;"><strong>Người xử lý phiếu:</strong> {handler_text}</div><a href="{ticket_link}" target="_blank" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:8px;font-weight:600;">Xem chi tiết phiếu hỗ trợ</a></div>"""
 
         try:
             import raven.api.raven_message
-            raven.api.raven_message.send_message(
-                channel_id=self.channel_id,
-                text=text,
-                is_reply=False,
-                send_silently=False
-            )
+            original_user = getattr(frappe.session, "user", "Guest")
+            try:
+                frappe.set_user("adminhotro@gmail.com")
+                raven.api.raven_message.send_message(
+                    channel_id=self.channel_id,
+                    text=text,
+                    is_reply=False,
+                    send_silently=False
+                )
+            finally:
+                frappe.set_user(original_user)
             return True
         except Exception as e:
             frappe.log_error(title=ErrorConfig.SEND_MESSAGE_LOG_TITLE.message, message=str(e))
             raise CommonException(ErrorConfig.SEND_MESSAGE_THROW)
+
+    @run_as_admin
+    def send_reassign_notification(self, ticket_name, subject, old_agent_email, old_agent_name, new_agent_email, new_agent_name):
+        site_url = frappe.utils.get_url()
+        ticket_link = f"{site_url}/helpdesk/tickets/{ticket_name}"
+
+        if new_agent_email:
+            new_handler = f"""<span data-type="userMention" class="mention" data-id="{new_agent_email}" data-label="{new_agent_name}">@{new_agent_name}</span>"""
+        else:
+            new_handler = f"""<strong>{new_agent_name}</strong>"""
+
+        text = f"""<div style="border:1px solid #fbbf24;border-radius:12px;padding:16px;background:#fffbeb;max-width:450px;font-family:Arial,sans-serif;"><div style="font-size:18px;font-weight:bold;color:#d97706;margin-bottom:8px;">🔄 Chuyển phiếu hỗ trợ</div><div style="margin-bottom:8px;"><strong>Mã phiếu:</strong> {ticket_name}</div><div style="margin-bottom:8px;"><strong>Tiêu đề:</strong> {subject}</div><div style="margin-bottom:8px;"><strong>Agent cũ:</strong> {old_agent_name} (đã bị xóa)</div><div style="margin-bottom:16px;"><strong>Người xử lý mới:</strong> {new_handler}</div><a href="{ticket_link}" target="_blank" style="display:inline-block;background:#d97706;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:8px;font-weight:600;">Xem chi tiết phiếu</a></div>"""
+
+        try:
+            import raven.api.raven_message
+            original_user = getattr(frappe.session, "user", "Guest")
+            try:
+                frappe.set_user("adminhotro@gmail.com")
+                raven.api.raven_message.send_message(
+                    channel_id=self.channel_id,
+                    text=text,
+                    is_reply=False,
+                    send_silently=False
+                )
+            finally:
+                frappe.set_user(original_user)
+            return True
+        except Exception as e:
+            frappe.log_error(title="Raven Reassign Notification Error", message=str(e))
 
 
     def check_local_channel(self):

@@ -26,14 +26,14 @@
     <Dropdown
       :options="
         ticketStatusStore.options.map((o) => ({
-          label: o,
+          label: ticketStatusStore.labelMap[o] || o,
           value: o,
           onClick: () => setValue.submit({ field: 'status', value: o }),
         }))
       "
     >
       <Button
-        :label="ticket.data.status"
+        :label="ticketStatusStore.labelMap[ticket.data.status] || ticket.data.status"
         :theme="ticketStatusStore.colorMap[ticket.data.status]"
         variant="subtle"
       >
@@ -81,7 +81,7 @@ function assignAgent(agent: string) {
     onSuccess: () => {
       emitter.emit("update:ticket");
       createToast({
-        title: `Ticket assigned to ${agent}`,
+        title: `Phiếu đã được giao cho ${agent}`,
         icon: "check",
         iconClasses: "text-green-600",
       });
@@ -102,7 +102,7 @@ const setValue = createResource({
   onSuccess: () => {
     emitter.emit("update:ticket");
     createToast({
-      title: "Ticket updated",
+      title: "Đã cập nhật phiếu",
       icon: "check",
       iconClasses: "text-green-600",
     });

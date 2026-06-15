@@ -147,16 +147,11 @@
             </template>
             <template #bottom-right>
               <Button
-                :label="
-                  {
-                    Comment: 'Comment',
-                    Response: 'Send',
-                  }[mode]
-                "
+                :label="mode === Mode.Comment ? 'Ghi chú' : 'Gửi'"
                 theme="gray"
                 variant="solid"
-                :disabled="$refs.editor.editor.isEmpty || resource.loading"
-                @click="() => resource.submit()"
+                :disabled="$refs.editor?.editor?.isEmpty || resource?.loading"
+                @click="() => resource?.submit()"
               />
             </template>
           </TicketTextEditor>
@@ -204,8 +199,8 @@ interface P {
 }
 
 enum Mode {
-  Comment = "Comment",
-  Response = "Response",
+  Comment = "Ghi chú",
+  Response = "Phản hồi",
 }
 
 const props = defineProps<P>();
@@ -220,7 +215,7 @@ const ticket = createResource({
 });
 provide(ITicket, ticket);
 const editor = ref(null);
-const placeholder = "Compose a comment / reply";
+const placeholder = "Soạn ghi chú / phản hồi";
 const content = ref("");
 const attachments = ref([]);
 const isExpanded = ref(false);
@@ -259,7 +254,7 @@ const comment = createResource({
     clear();
     emitter.emit("update:ticket");
   },
-  onError: useError({ title: "Error adding comment" }),
+  onError: useError({ title: "Lỗi khi thêm ghi chú" }),
 });
 
 const response = createResource({
@@ -280,14 +275,11 @@ const response = createResource({
     clear();
     emitter.emit("update:ticket");
   },
-  onError: useError({ title: "Error replying to ticket" }),
+  onError: useError({ title: "Lỗi khi phản hồi phiếu" }),
 });
 
 const resource = computed(() => {
-  return {
-    Comment: comment,
-    Response: response,
-  }[mode.value];
+  return mode.value === Mode.Comment ? comment : response;
 });
 
 function clear() {

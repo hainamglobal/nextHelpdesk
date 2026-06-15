@@ -102,7 +102,7 @@
         <Autocomplete
           :options="o.store.dropdown"
           :placeholder="t('ticket_details.select_placeholder', { label: o.label.toLowerCase() })"
-          :value="data[o.field]"
+          :value="data[o.field] ? { label: o.store.labelMap?.[data[o.field]] || data[o.field], value: data[o.field] } : null"
           @change="update(o.field, $event.value)"
         />
       </div>

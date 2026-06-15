@@ -60,6 +60,10 @@ export function getErrorMessage(errorCode: string): { title: string; message: st
       title: "Lỗi tạo Agent",
       message: "Đã xảy ra lỗi trong quá trình tạo Agent trên server. Dữ liệu đã được rollback.",
     },
+    "AGENT-ERR-003": {
+      title: "Lỗi xóa Agent",
+      message: "Phải có ít nhất một nhân viên để có thể nhận được các phiếu đã được giao.",
+    },
     "CHANNEL-ERR-400": {
       title: "Lỗi Channel",
       message: "Tạo Channel thành công nhưng không nhận được ID trả về.",

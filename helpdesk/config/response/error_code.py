@@ -18,6 +18,8 @@ class ErrorConfig(Enum):
 
     # agent ko tồn tại
     AGENT_NOT_EXIST = (StatusCode.NOT_FOUND ,"AGENT-ERR-001" ,"Nhân viên không tôn tại" )
+    AT_LEAST_ONE_AGENT = (StatusCode.BAD_REQUEST ,"AGENT-ERR-003" ,"Phải có ít nhất một nhân viên để có thể nhận được các phiếu đã được giao" )
+
     
     # lỗi forbidden
     FORBIDDEN_ERROR = (StatusCode.FORBIDDEN, "SYS-ERR-403", "Bạn không có quyền thực hiện thao tác này")
