@@ -17,10 +17,10 @@ class AgentRepository:
         sql = """
             SELECT email, full_name, user_image
             FROM `tabUser`
-            WHERE email LIKE %s AND enabled = 1
+            WHERE (email LIKE %s OR full_name LIKE %s) AND enabled = 1
             LIMIT 20
         """
-        return frappe.db.sql(sql, f"%{query}%", as_dict=True)
+        return frappe.db.sql(sql, (f"%{query}%", f"%{query}%"), as_dict=True)
 
     def get_agent_for_assignment(self):
         """

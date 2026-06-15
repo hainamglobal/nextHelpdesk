@@ -20,7 +20,7 @@
 										class="w-full"
 										type="text"
 										v-model="searchInput"
-										placeholder="Nhập email..."
+										placeholder="Nhập tên hoặc email..."
 										@input="(val) => { onSearchInputChange(val); openPopover(); }"
 										@focus="() => { updateDropdownWidth(); onInputFocus(); openPopover(); }"
 										@click="() => { updateDropdownWidth(); onInputFocus(); openPopover(); }"
@@ -202,29 +202,27 @@ export default {
 			this.clearSearchInput()
 		},
 		onSearchInputChange(val) {
-			val = val.replaceAll(" ", "")
-
-			if (val == "") {
-				document.getElementById("searchInput").value = ""
+			if (!val || val.trim() === "") {
 				this.showDropdown = false
 				this.emailOptions = []
 				this.searchEmailsFromAPI("") // Fetch defaults again
 				return
 			}
 
-			const valStr = val
 			const inputs = val.split(",")
 
 			let clearInputFlag = false
 			this.currentInputIsValidEmail = false
+			
 			inputs.forEach((input) => {
-				if (this.testEmailRegex(input)) {
+				const trimmedInput = input.trim()
+				if (this.testEmailRegex(trimmedInput)) {
 					if (inputs.length > 1) {
-						this.addToInviteQueue(input)
+						this.addToInviteQueue(trimmedInput)
 						clearInputFlag = true
 					} else {
-						if (valStr.includes(",")) {
-							this.addToInviteQueue(input)
+						if (val.includes(",")) {
+							this.addToInviteQueue(trimmedInput)
 							clearInputFlag = true
 						} else {
 							this.currentInputIsValidEmail = true
@@ -232,6 +230,7 @@ export default {
 					}
 				}
 			})
+			
 			if (clearInputFlag) {
 				this.clearSearchInput()
 			} else {
