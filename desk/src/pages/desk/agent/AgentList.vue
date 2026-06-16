@@ -176,24 +176,24 @@ function confirmDelete(data: any) {
 }
 
 function onAddAgents(res: any) {
-  // Ensure we get an array, unwrapping if necessary
-  let newAgents = Array.isArray(res) ? res : (res && Array.isArray(res.message) ? res.message : []);
-  
-  if (newAgents && newAgents.length > 0) {
-    if (!agents.data) {
-      agents.data = [];
-    }
-    for (const agent of newAgents) {
-      if (!agent) continue;
-      
-      // Normalize fields so they render correctly in the ListView columns
-      agent.full_name = agent.full_name || agent.user || agent.name;
-      agent.email = agent.email || agent.user;
-      agent.username = agent.username || agent.user;
-      agent.user_image = agent.user_image || '';
-      agent.onClick = () => toTickets(agent.name);
-      
-      agents.data.unshift(agent);
+  if (agents && typeof agents.reload === 'function') {
+    agents.reload();
+  } else {
+    // Fallback if reload is not available
+    let newAgents = Array.isArray(res) ? res : (res && Array.isArray(res.message) ? res.message : []);
+    if (newAgents && newAgents.length > 0) {
+      if (!agents.data) {
+        agents.data = [];
+      }
+      for (const agent of newAgents) {
+        if (!agent) continue;
+        agent.full_name = agent.full_name || agent.user || agent.name;
+        agent.email = agent.email || agent.user;
+        agent.username = agent.username || agent.user;
+        agent.user_image = agent.user_image || '';
+        agent.onClick = () => toTickets(agent.name);
+      }
+      agents.data = [...newAgents, ...agents.data];
     }
   }
 }
