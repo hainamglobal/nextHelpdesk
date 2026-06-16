@@ -77,16 +77,29 @@ const tickets = createListManager({
   orderBy: getOrder(),
   auto: true,
   transform: (data) => {
-    for (const d of data) {
+    // Chỉ hiển thị:
+    // 1. Admin (thấy tất cả)
+    // 2. Ticket chưa được phân công (để có thể nhận/assign)
+    // 3. Ticket đã được phân công cho chính user đó
+    const filteredData = data.filter(d => {
+      if (authStore.isAdmin) return true;
+      const isUnassigned = !d._assign || d._assign === '[]' || d._assign === '';
+      const isMine = d._assign && d._assign.includes(authStore.userId);
+      return isUnassigned || isMine;
+    });
+
+    for (const d of filteredData) {
       d.class = {
         "font-medium": !d._seen?.includes(authStore.userId),
       };
+      
       d.onClick = {
         name: AGENT_PORTAL_TICKET,
         params: {
           ticketId: d.name,
         },
       };
+      
       d.conversation = {
         incoming: d.count_msg_incoming,
         outgoing: d.count_msg_outgoing,
@@ -94,7 +107,7 @@ const tickets = createListManager({
       };
       d.source = d.via_customer_portal ? "Cổng khách hàng" : "Email";
     }
-    return data;
+    return filteredData;
   },
 });
 
@@ -210,3 +223,5 @@ usePageMeta(() => {
   };
 });
 </script>
+
+

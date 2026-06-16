@@ -95,6 +95,16 @@
     <template #via_customer_portal="{ data }">
       {{ data.via_customer_portal ? "Cổng khách hàng" : "Email" }}
     </template>
+    <template #customer="{ data }">
+      <div class="flex flex-col">
+        <span class="font-medium text-gray-900 truncate" :title="data.customer_name || data.customer || data.contact || data.raised_by">
+          {{ data.customer_name || data.customer || data.contact || data.raised_by }}
+        </span>
+        <span class="text-xs text-gray-500 truncate" :title="data.raised_by">
+          {{ data.raised_by }}
+        </span>
+      </div>
+    </template>
     <template #actions="{ selection: s }">
       <Dropdown :options="assignOpts(s as Set<number>)">
         <template #default>
@@ -121,6 +131,7 @@ import { Icon } from "@iconify/vue";
 import { dayjs } from "@/dayjs";
 import { useAgentStore } from "@/stores/agent";
 import { useTicketStatusStore } from "@/stores/ticketStatus";
+import { useAuthStore } from "@/stores/auth";
 import { createToast, getAssign } from "@/utils";
 import { Resource } from "@/types";
 import { useError } from "@/composables/error";
@@ -133,6 +144,7 @@ interface P {
 
 defineProps<P>();
 const agentStore = useAgentStore();
+const authStore = useAuthStore();
 const ticketStatusStore = useTicketStatusStore();
 const slaStatusColorMap = {
   Fulfilled: "green",
@@ -180,13 +192,32 @@ const bulkAssignTicketToAgent = createResource({
 });
 
 function assignOpts(selected: Set<number>) {
+  // Loại bỏ các ticket không thuộc quyền thao tác của user hiện tại
+  const validSelectedIds = Array.from(selected).filter(ticketId => {
+    const ticket = props.resource?.data?.find((t: any) => t.name === ticketId);
+    if (!ticket) return false;
+    // Nếu là Admin thì thao tác được tất cả
+    if (authStore.isAdmin) return true;
+    
+    // Được phép thao tác nếu ticket chưa gán cho ai (để nhận) 
+    // hoặc đã gán cho chính user hiện tại
+    const isUnassigned = !ticket._assign || ticket._assign === '[]' || ticket._assign === '';
+    const isMine = ticket._assign && ticket._assign.includes(authStore.userId);
+    return isUnassigned || isMine;
+  });
+
   return agentStore.options.map((a) => ({
     label: a.agent_name,
-    onClick: () =>
+    onClick: () => {
+      if (validSelectedIds.length === 0) {
+        createToast({ title: "Không có phiếu hợp lệ để phân công", icon: "x", iconClasses: "text-red-500" });
+        return;
+      }
       bulkAssignTicketToAgent.submit({
-        ticket_ids: Array.from(selected),
+        ticket_ids: validSelectedIds,
         agent_id: a.name,
-      }),
+      });
+    }
   }));
 }
 </script>
