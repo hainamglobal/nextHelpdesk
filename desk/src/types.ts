@@ -127,6 +127,7 @@ export type Column = {
   align?: string;
   width?: string;
   text?: string;
+  hidden?: boolean;
 };
 
 export type File = {

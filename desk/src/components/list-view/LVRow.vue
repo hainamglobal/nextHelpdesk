@@ -81,7 +81,7 @@ const checkbox = inject(CheckboxKey);
 const columns = inject(ColumnsKey);
 const doctype = inject(DocTypeKey);
 const props = defineProps<P>();
-const { storage: hiddenColumns } = useColumns(doctype);
+const { storage: hiddenColumns } = useColumns(doctype, (columns as any[]).filter(c => c.hidden).map(c => c.key));
 const fieldsStore = useFieldsStore();
 const filter = useFilter(doctype);
 

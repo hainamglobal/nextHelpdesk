@@ -1,7 +1,7 @@
 <template>
   <NestedPopover>
     <template #target>
-      <Button label="Filters" theme="gray" variant="outline">
+      <Button label="Bộ lọc" theme="gray" variant="outline">
         <template #prefix>
           <LucideListFilter class="h-4 w-4" />
         </template>
@@ -22,13 +22,13 @@
           >
             <div class="flex items-center gap-2">
               <div class="w-13 pl-2 text-end text-base text-gray-600">
-                {{ i == 0 ? "Where" : "And" }}
+                {{ i == 0 ? "Điều kiện" : "Và" }}
               </div>
               <div id="fieldname" class="!min-w-[140px]">
                 <Autocomplete
                   :value="f.field.fieldname"
                   :options="fields"
-                  placeholder="Filter by..."
+                  placeholder="Lọc theo..."
                   @change="(e) => updateFilter(e, i)"
                 />
               </div>
@@ -37,7 +37,7 @@
                   v-model="f.operator"
                   type="select"
                   :options="getOperators(f.field.fieldtype)"
-                  placeholder="Operator"
+                  placeholder="Điều kiện"
                 />
               </div>
               <div id="value" class="!min-w-[140px]">
@@ -45,14 +45,14 @@
                   v-if="typeLink.includes(f.field.fieldtype)"
                   :doctype="f.field.options"
                   :value="f.value"
-                  placeholder="Value"
+                  placeholder="Giá trị"
                   @change="(v) => (f.value = v.value)"
                 />
                 <component
                   :is="getValSelect(f.field.fieldtype, f.field.options)"
                   v-else
                   v-model="f.value"
-                  placeholder="Value"
+                  placeholder="Giá trị"
                 />
               </div>
             </div>
@@ -62,20 +62,20 @@
             v-else
             class="mb-3 flex h-7 items-center px-3 text-sm text-gray-600"
           >
-            Empty - Choose a field to filter by
+            Trống - Vui lòng chọn một trường để lọc
           </div>
           <div class="flex items-center justify-between gap-2">
             <Autocomplete
               value=""
               :options="fields"
-              placeholder="Filter by..."
+              placeholder="Lọc theo..."
               @change="(e) => setfilter(e)"
             >
               <template #target="{ togglePopover }">
                 <Button
                   class="!text-gray-600"
                   variant="ghost"
-                  label="Add filter"
+                  label="Thêm bộ lọc"
                   @click="() => togglePopover()"
                 >
                   <template #prefix>
@@ -88,7 +88,7 @@
               v-if="storage.size"
               class="!text-gray-600"
               variant="ghost"
-              label="Clear all filter"
+              label="Xóa tất cả bộ lọc"
               @click="() => clearfilter(close)"
             />
           </div>
@@ -129,10 +129,10 @@ function getOperators(fieldtype) {
   if (typeString.includes(fieldtype)) {
     options.push(
       ...[
-        { label: "Equals", value: "equals" },
-        { label: "Not Equals", value: "not equals" },
-        { label: "Like", value: "like" },
-        { label: "Not Like", value: "not like" },
+        { label: "Bằng", value: "equals" },
+        { label: "Không bằng", value: "not equals" },
+        { label: "Chứa", value: "like" },
+        { label: "Không chứa", value: "not like" },
       ]
     );
   }
@@ -143,21 +143,21 @@ function getOperators(fieldtype) {
         { label: ">", value: ">" },
         { label: "<=", value: "<=" },
         { label: ">=", value: ">=" },
-        { label: "Equals", value: "equals" },
-        { label: "Not Equals", value: "not equals" },
+        { label: "Bằng", value: "equals" },
+        { label: "Không bằng", value: "not equals" },
       ]
     );
   }
   if (typeSelect.includes(fieldtype) || typeLink.includes(fieldtype)) {
     options.push(
       ...[
-        { label: "Is", value: "is" },
-        { label: "Is Not", value: "is not" },
+        { label: "Là", value: "is" },
+        { label: "Không phải là", value: "is not" },
       ]
     );
   }
   if (typeCheck.includes(fieldtype)) {
-    options.push(...[{ label: "Equals", value: "equals" }]);
+    options.push(...[{ label: "Bằng", value: "equals" }]);
   }
   return options;
 }
@@ -168,10 +168,19 @@ function getValSelect(fieldtype, options) {
       fieldtype == "Check" ? ["Yes", "No"] : getSelectOptions(options);
     return h(FormControl, {
       type: "select",
-      options: _options.map((o) => ({
-        label: o,
-        value: o,
-      })),
+      options: _options.map((o) => {
+        let label = o;
+        if (o === "Yes") label = "Có";
+        else if (o === "No") label = "Không";
+        else if (o === "Low") label = "Thấp";
+        else if (o === "Medium") label = "Trung bình";
+        else if (o === "High") label = "Cao";
+        else if (o === "Urgent") label = "Khẩn cấp";
+        return {
+          label,
+          value: o,
+        };
+      }),
     });
   } else {
     return h(FormControl, { type: "text" });

@@ -205,9 +205,46 @@ class HDTicket(Document):
 		email_id = parseaddr(self.raised_by)[1]
 		if email_id:
 			if not self.contact:
-				contact = frappe.db.get_value("Contact", {"email_id": email_id})
+				# 1. Tìm trong Contact Email (vì email_id trong Contact có thể nằm trong child table Contact Email)
+				contact = frappe.db.get_value("Contact Email", {"email_id": email_id}, "parent")
+				if not contact:
+					# Thử tìm trực tiếp trong Contact (fallback)
+					contact = frappe.db.get_value("Contact", {"email_id": email_id})
+				
 				if contact:
 					self.contact = contact
+				else:
+					# 2. Nếu không có Contact, tìm tên trong User hoặc raised_by_name
+					full_name = None
+					first_name = None
+					last_name = None
+					user_info = frappe.db.get_value("User", {"email": email_id}, ["first_name", "last_name", "full_name"], as_dict=True)
+					if user_info:
+						full_name = user_info.full_name
+						first_name = user_info.first_name
+						last_name = user_info.last_name
+					else:
+						full_name = self.get("raised_by_name")
+						if not full_name:
+							full_name = email_id.split('@')[0]
+						
+						parts = full_name.split(" ", 1)
+						first_name = parts[0]
+						last_name = parts[1] if len(parts) > 1 else ""
+
+					# 3. Tạo mới Contact
+					try:
+						new_contact = frappe.new_doc("Contact")
+						new_contact.first_name = first_name or full_name
+						new_contact.last_name = last_name or ""
+						new_contact.append("email_ids", {
+							"email_id": email_id,
+							"is_primary": 1
+						})
+						new_contact.insert(ignore_permissions=True)
+						self.contact = new_contact.name
+					except Exception as e:
+						frappe.log_error(title="Failed to create contact for ticket", message=str(e))
 
 	def set_customer(self):
 		"""

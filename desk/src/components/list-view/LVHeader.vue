@@ -28,7 +28,7 @@ const checkbox = inject(CheckboxKey);
 const columns = inject(ColumnsKey);
 const doctype = inject(DocTypeKey);
 const resource = inject(ResourceKey);
-const { storage: hiddenColumns } = useColumns(doctype);
+const { storage: hiddenColumns } = useColumns(doctype, (columns as any[]).filter(c => c.hidden).map(c => c.key));
 
 function toggle() {
   if (selection.storage.size === resource.data.length) {

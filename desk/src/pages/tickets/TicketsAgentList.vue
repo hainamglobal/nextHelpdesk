@@ -16,6 +16,15 @@
     <template #priority="{ data }">
       {{ priorityLabelMap[data.priority] || data.priority }}
     </template>
+    <template #custom_severity="{ data }">
+      <Badge
+        v-if="data.custom_severity"
+        :label="severityLabelMap[data.custom_severity] || data.custom_severity"
+        :theme="severityColorMap[data.custom_severity] || 'gray'"
+        variant="subtle"
+      />
+      <span v-else>⸺</span>
+    </template>
     <template #conversation="{ data }">
       <span class="flex items-center">
         <span v-for="i in ['incoming', 'outgoing', 'comments']" :key="i">
@@ -97,11 +106,11 @@
     </template>
     <template #customer="{ data }">
       <div class="flex flex-col">
-        <span class="font-medium text-gray-900 truncate" :title="data.customer_name || data.customer || data.contact || data.raised_by">
-          {{ data.customer_name || data.customer || data.contact || data.raised_by }}
+        <span class="font-medium text-gray-900 truncate" :title="getDisplayName(data)">
+          {{ getDisplayName(data) }}
         </span>
-        <span class="text-xs text-gray-500 truncate" :title="data.raised_by">
-          {{ data.raised_by }}
+        <span class="text-xs text-gray-500 truncate" :title="getEmail(data.raised_by)">
+          {{ getEmail(data.raised_by) }}
         </span>
       </div>
     </template>
@@ -170,6 +179,29 @@ const priorityLabelMap: Record<string, string> = {
   Low: "Thấp",
 };
 
+// Map mức độ nghiêm trọng sang tiếng Việt & màu sắc
+const severityLabelMap: Record<string, string> = {
+  Urgent: "Khẩn cấp",
+  High: "Cao",
+  Medium: "Trung bình",
+  Low: "Thấp",
+  "Khẩn cấp": "Khẩn cấp",
+  "Cao": "Cao",
+  "Trung bình": "Trung bình",
+  "Thấp": "Thấp",
+};
+
+const severityColorMap: Record<string, string> = {
+  Low: "green",
+  Medium: "orange",
+  High: "red",
+  Urgent: "red",
+  "Thấp": "green",
+  "Trung bình": "orange",
+  "Cao": "red",
+  "Khẩn cấp": "red",
+};
+
 // Map giá trị API sang tiếng Việt
 const slaLabelMap: Record<string, string> = {
   Fulfilled: "Đúng hạn",
@@ -190,6 +222,40 @@ const bulkAssignTicketToAgent = createResource({
   },
   onError: useError({ title: "Không thể phân công phiếu" }),
 });
+
+function getDisplayName(data: any) {
+  if (data.full_name) return data.full_name;
+  if (data.customer_name) return data.customer_name;
+  if (data.contact) {
+    if (typeof data.contact === "string") return data.contact;
+    if (data.contact.full_name) return data.contact.full_name;
+    if (data.contact.name) return data.contact.name;
+  }
+  
+  // Try to parse name from raised_by (e.g. "John Doe <john@doe.com>")
+  if (data.raised_by) {
+    const match = data.raised_by.match(/^(.*?)\s*<.*>$/);
+    if (match && match[1]) {
+      const name = match[1].replace(/["']/g, "").trim();
+      if (name) return name;
+    }
+  }
+  
+  if (data.customer) return data.customer;
+  
+  // Fallback to email prefix if no name found
+  if (data.raised_by) {
+    const email = getEmail(data.raised_by);
+    return email.split('@')[0];
+  }
+  return "Không rõ";
+}
+
+function getEmail(raisedBy: string) {
+  if (!raisedBy) return "";
+  const match = raisedBy.match(/<([^>]+)>/);
+  return match ? match[1] : raisedBy;
+}
 
 function assignOpts(selected: Set<number>) {
   // Loại bỏ các ticket không thuộc quyền thao tác của user hiện tại
