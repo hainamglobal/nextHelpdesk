@@ -1,7 +1,7 @@
 <template>
   <NestedPopover>
     <template #target>
-      <Button label="Columns" theme="gray" variant="outline">
+      <Button label="Cột" theme="gray" variant="outline">
         <template #prefix>
           <LucideColumns class="h-4 w-4" />
         </template>
@@ -39,5 +39,5 @@ interface P {
 }
 
 const props = defineProps<P>();
-const { storage: hidden, toggle } = useColumns(props.doctype);
+const { storage: hidden, toggle } = useColumns(props.doctype, props.columns.filter(c => c.hidden).map(c => c.key));
 </script>

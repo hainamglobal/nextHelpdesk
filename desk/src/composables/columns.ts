@@ -3,12 +3,16 @@ import { useStorage } from "@vueuse/core";
 
 /**
  * @param doctype - The DocType to use
+ * @param defaultHidden - Array of column keys to hide by default
  */
-export function useColumns(doctype: string) {
+export function useColumns(doctype: string, defaultHidden: string[] = []) {
   const route = useRoute();
-  const prefix = "hide_columns";
+  const prefix = "hide_columns_v3";
   const storageKey = [prefix, route.path, doctype].join("_");
-  const storage = useStorage(storageKey, new Set());
+  
+  // Convert default array to Set
+  const defaultSet = new Set(defaultHidden);
+  const storage = useStorage(storageKey, defaultSet);
 
   /**
    * @param key - The column key to toggle

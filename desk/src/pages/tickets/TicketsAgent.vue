@@ -154,6 +154,12 @@ const columns = [
     label: "Ưu tiên",
     key: "priority",
     width: "w-32",
+    hidden: true,
+  },
+  {
+    label: "Mức độ nghiêm trọng",
+    key: "custom_severity",
+    width: "w-40",
   },
   {
     label: "Loại",
@@ -164,6 +170,7 @@ const columns = [
     label: "Nhóm",
     key: "agent_group",
     width: "w-36",
+    hidden: true,
   },
   {
     label: "Liên hệ",
