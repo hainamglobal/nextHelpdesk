@@ -9,7 +9,7 @@ def run_as_admin(func):
     def wrapper(*args, **kwargs):
         original_user = getattr(frappe.session, "user", "Guest")
         try:
-            frappe.set_user("Administrator")
+            frappe.set_user("adminhotro@gmail.com")
             return func(*args, **kwargs)
         finally:
             frappe.set_user(original_user)
@@ -17,7 +17,7 @@ def run_as_admin(func):
 
 class HDRavenChannelService:
     def __init__(self):
-        self.channel_name = "Nhóm hỗ trợ khách hàng nextGrp"
+        self.channel_name = "Nhóm hỗ trợ khách hàng nextGRP"
         
         channel_id = self.check_local_channel()
         if not channel_id:
@@ -105,17 +105,12 @@ class HDRavenChannelService:
 
         try:
             import raven.api.raven_message
-            original_user = getattr(frappe.session, "user", "Guest")
-            try:
-                frappe.set_user("adminhotro@gmail.com")
-                raven.api.raven_message.send_message(
-                    channel_id=self.channel_id,
-                    text=text,
-                    is_reply=False,
-                    send_silently=False
-                )
-            finally:
-                frappe.set_user(original_user)
+            raven.api.raven_message.send_message(
+                channel_id=self.channel_id,
+                text=text,
+                is_reply=False,
+                send_silently=False
+            )
             return True
         except Exception as e:
             frappe.log_error(title=ErrorConfig.SEND_MESSAGE_LOG_TITLE.message, message=str(e))
@@ -135,17 +130,12 @@ class HDRavenChannelService:
 
         try:
             import raven.api.raven_message
-            original_user = getattr(frappe.session, "user", "Guest")
-            try:
-                frappe.set_user("adminhotro@gmail.com")
-                raven.api.raven_message.send_message(
-                    channel_id=self.channel_id,
-                    text=text,
-                    is_reply=False,
-                    send_silently=False
-                )
-            finally:
-                frappe.set_user(original_user)
+            raven.api.raven_message.send_message(
+                channel_id=self.channel_id,
+                text=text,
+                is_reply=False,
+                send_silently=False
+            )
             return True
         except Exception as e:
             frappe.log_error(title="Raven Reassign Notification Error", message=str(e))
