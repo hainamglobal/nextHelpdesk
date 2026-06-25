@@ -109,7 +109,8 @@ class HDRavenChannelService:
                 channel_id=self.channel_id,
                 text=text,
                 is_reply=False,
-                send_silently=False
+                send_silently=False,
+                message_type="Helpdesk"
             )
             return True
         except Exception as e:
@@ -134,7 +135,8 @@ class HDRavenChannelService:
                 channel_id=self.channel_id,
                 text=text,
                 is_reply=False,
-                send_silently=False
+                send_silently=False,
+                message_type="Helpdesk"
             )
             return True
         except Exception as e:
