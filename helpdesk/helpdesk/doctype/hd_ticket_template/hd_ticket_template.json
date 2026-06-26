@@ -17,19 +17,22 @@
    "fieldname": "template_name",
    "fieldtype": "Data",
    "label": "Template Name",
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Template Name."
   },
   {
    "fieldname": "about",
    "fieldtype": "Code",
    "label": "About",
-   "options": "HTML"
+   "options": "HTML",
+   "description": "Lưu trữ thông tin About."
   },
   {
    "fieldname": "fields",
    "fieldtype": "Table",
    "label": "Fields",
-   "options": "HD Ticket Template Field"
+   "options": "HD Ticket Template Field",
+   "description": "Lưu trữ thông tin Fields. (Tham chiếu đến bảng: HD Ticket Template Field)"
   }
  ],
  "index_web_pages_for_search": 1,

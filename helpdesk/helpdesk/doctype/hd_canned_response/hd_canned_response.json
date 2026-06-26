@@ -15,12 +15,14 @@
    "fieldname": "title",
    "fieldtype": "Data",
    "label": "Title",
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Title."
   },
   {
    "fieldname": "message",
    "fieldtype": "Text Editor",
-   "label": "Message"
+   "label": "Message",
+   "description": "Lưu trữ thông tin Message."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -59,5 +61,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Canned Response trong hệ thống Helpdesk."
 }

@@ -15,13 +15,15 @@
    "fieldname": "organization_name",
    "fieldtype": "Data",
    "label": "Name",
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Name."
   },
   {
    "fieldname": "contacts",
    "fieldtype": "Table",
    "label": "Contacts",
-   "options": "HD Organization Contact Item"
+   "options": "HD Organization Contact Item",
+   "description": "Lưu trữ thông tin Contacts. (Tham chiếu đến bảng: HD Organization Contact Item)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -48,5 +50,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Organization trong hệ thống Helpdesk."
 }

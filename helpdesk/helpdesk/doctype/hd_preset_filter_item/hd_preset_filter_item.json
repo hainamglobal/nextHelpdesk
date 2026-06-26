@@ -16,26 +16,30 @@
    "fieldname": "fieldname",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Field Name"
+   "label": "Field Name",
+   "description": "Lưu trữ thông tin Field Name."
   },
   {
    "fieldname": "filter_type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Filter Type",
-   "options": "is\nis not\nbefore\nafter\nbetween\nlike\nnot like\nin\nnot in"
+   "options": "is\nis not\nbefore\nafter\nbetween\nlike\nnot like\nin\nnot in",
+   "description": "Lưu trữ thông tin Filter Type. Các tùy chọn bao gồm: is, is not, before, after, between, like, not like, in, not in. Các giá trị có thể chọn: [is, is not, before, after, between, like, not like, in, not in]"
   },
   {
    "fieldname": "value",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Value"
+   "label": "Value",
+   "description": "Lưu trữ thông tin Value."
   },
   {
    "fieldname": "label",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Label"
+   "label": "Label",
+   "description": "Lưu trữ thông tin Label."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -50,5 +54,6 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Preset Filter Item trong hệ thống Helpdesk."
 }

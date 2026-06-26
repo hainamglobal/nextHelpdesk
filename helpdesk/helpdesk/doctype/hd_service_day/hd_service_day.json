@@ -18,7 +18,8 @@
    "in_list_view": 1,
    "label": "Workday",
    "options": "Monday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Workday. Các tùy chọn bao gồm: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Các giá trị có thể chọn: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]"
   },
   {
    "fieldname": "section_break_2",
@@ -29,7 +30,8 @@
    "fieldtype": "Time",
    "in_list_view": 1,
    "label": "Start Time",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Start Time."
   },
   {
    "fieldname": "column_break_3",
@@ -40,7 +42,8 @@
    "fieldtype": "Time",
    "in_list_view": 1,
    "label": "End Time",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin End Time."
   }
  ],
  "istable": 1,
@@ -55,5 +58,6 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ thông tin về HD Service Day trong hệ thống Helpdesk."
 }

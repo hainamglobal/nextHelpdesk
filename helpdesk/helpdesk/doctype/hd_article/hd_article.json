@@ -29,7 +29,8 @@
    "in_standard_filter": 1,
    "label": "Title",
    "reqd": 1,
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Title."
   },
   {
    "fieldname": "category",
@@ -37,28 +38,32 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Category",
-   "options": "HD Article Category"
+   "options": "HD Article Category",
+   "description": "Lưu trữ thông tin Category. (Tham chiếu đến bảng: HD Article Category)"
   },
   {
    "default": "0",
    "fieldname": "views",
    "fieldtype": "Int",
    "hidden": 1,
-   "label": "Views"
+   "label": "Views",
+   "description": "Lưu trữ thông tin Views."
   },
   {
    "default": "0",
    "fieldname": "helpful",
    "fieldtype": "Int",
    "hidden": 1,
-   "label": "Helpful"
+   "label": "Helpful",
+   "description": "Lưu trữ thông tin Helpful."
   },
   {
    "default": "0",
    "fieldname": "not_helpful",
    "fieldtype": "Int",
    "hidden": 1,
-   "label": "Not Helpful"
+   "label": "Not Helpful",
+   "description": "Lưu trữ thông tin Not Helpful."
   },
   {
    "allow_in_quick_entry": 1,
@@ -70,7 +75,8 @@
    "allow_in_quick_entry": 1,
    "fieldname": "content",
    "fieldtype": "Text",
-   "label": "Content"
+   "label": "Content",
+   "description": "Lưu trữ thông tin Content."
   },
   {
    "depends_on": "author",
@@ -78,13 +84,15 @@
    "fieldtype": "Link",
    "label": "Author",
    "options": "User",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Author. (Tham chiếu đến bảng: User)"
   },
   {
    "depends_on": "eval:doc.published",
    "fieldname": "published_on",
    "fieldtype": "Datetime",
-   "label": "Published On"
+   "label": "Published On",
+   "description": "Lưu trữ thông tin Published On."
   },
   {
    "fieldname": "column_break_7",
@@ -94,20 +102,23 @@
    "default": "-1",
    "fieldname": "idx",
    "fieldtype": "Data",
-   "label": "Index"
+   "label": "Index",
+   "description": "Lưu trữ thông tin Index."
   },
   {
    "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Published\nDraft\nArchived"
+   "options": "Published\nDraft\nArchived",
+   "description": "Trạng thái hiện tại. Các tùy chọn bao gồm: Published, Draft, Archived. Các giá trị có thể chọn: [Published, Draft, Archived]"
   },
   {
    "fieldname": "title_slug",
    "fieldtype": "Data",
    "is_virtual": 1,
-   "label": "Title Slug"
+   "label": "Title Slug",
+   "description": "Lưu trữ thông tin Title Slug."
   }
  ],
  "links": [],
@@ -164,5 +175,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ các bài viết cơ sở tri thức (Knowledge Base / FAQs) để hỗ trợ khách hàng."
 }

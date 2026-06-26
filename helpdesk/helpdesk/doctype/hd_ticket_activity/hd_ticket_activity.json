@@ -14,12 +14,14 @@
    "fieldname": "ticket",
    "fieldtype": "Link",
    "label": "HD Ticket",
-   "options": "HD Ticket"
+   "options": "HD Ticket",
+   "description": "Lưu trữ thông tin HD Ticket. (Tham chiếu đến bảng: HD Ticket)"
   },
   {
    "fieldname": "action",
    "fieldtype": "Data",
-   "label": "Action"
+   "label": "Action",
+   "description": "Lưu trữ thông tin Action."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -58,5 +60,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Ticket Activity trong hệ thống Helpdesk."
 }

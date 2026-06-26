@@ -14,7 +14,8 @@
    "in_list_view": 1,
    "label": "Status",
    "options": "Open\nReplied\nResolved\nClosed",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Trạng thái hiện tại. Các tùy chọn bao gồm: Open, Replied, Resolved, Closed. Các giá trị có thể chọn: [Open, Replied, Resolved, Closed]"
   }
  ],
  "istable": 1,
@@ -29,5 +30,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ thông tin về HD Service Level Agreement Fulfilled On Status trong hệ thống Helpdesk."
 }

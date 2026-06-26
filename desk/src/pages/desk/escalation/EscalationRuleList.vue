@@ -26,6 +26,9 @@
           {{ data.is_enabled ? $t("escalation_rules.enabled") : $t("escalation_rules.disabled") }}
         </Badge>
       </template>
+      <template #ticket_type="{ data }">
+        {{ ticketTypeLabelMap[data.ticket_type] || data.ticket_type }}
+      </template>
     </ListView>
     <EscalationRuleDialog
       v-if="showDialog"
@@ -48,6 +51,15 @@ const { t } = useI18n();
 const showDialog = ref(false);
 const selectedRule = ref(null);
 const emptyMessage = computed(() => t("escalation_rules.empty"));
+
+// Map loại phiếu sang tiếng Việt
+const ticketTypeLabelMap: Record<string, string> = {
+  Bug: "Lỗi",
+  Incident: "Sự cố",
+  Question: "Câu hỏi",
+  Unspecified: "Chưa xác định",
+};
+
 const columns = computed(() => [
   {
     label: t("escalation_rules.priority"),

@@ -25,6 +25,9 @@
       />
       <span v-else>⸺</span>
     </template>
+    <template #ticket_type="{ data }">
+      {{ ticketTypeLabelMap[data.ticket_type] || data.ticket_type }}
+    </template>
     <template #conversation="{ data }">
       <span class="flex items-center">
         <span v-for="i in ['incoming', 'outgoing', 'comments']" :key="i">
@@ -177,6 +180,14 @@ const priorityLabelMap: Record<string, string> = {
   High: "Cao",
   Medium: "Trung bình",
   Low: "Thấp",
+};
+
+// Map loại phiếu sang tiếng Việt
+const ticketTypeLabelMap: Record<string, string> = {
+  Bug: "Lỗi",
+  Incident: "Sự cố",
+  Question: "Câu hỏi",
+  Unspecified: "Chưa xác định",
 };
 
 // Map mức độ nghiêm trọng sang tiếng Việt & màu sắc

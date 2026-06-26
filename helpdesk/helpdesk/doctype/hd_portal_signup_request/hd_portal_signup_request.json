@@ -13,13 +13,15 @@
   {
    "fieldname": "request_key",
    "fieldtype": "Data",
-   "label": "Request Key"
+   "label": "Request Key",
+   "description": "Lưu trữ thông tin Request Key."
   },
   {
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "description": "Lưu trữ thông tin User. (Tham chiếu đến bảng: User)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -45,5 +47,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Portal Signup Request trong hệ thống Helpdesk."
 }

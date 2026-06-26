@@ -18,7 +18,8 @@
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "description": "Lưu trữ thông tin User. (Tham chiếu đến bảng: User)"
   },
   {
    "fetch_from": "user.full_name",
@@ -27,32 +28,37 @@
    "in_global_search": 1,
    "in_standard_filter": 1,
    "label": "Agent Name",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Agent Name."
   },
   {
    "default": "1",
    "fieldname": "is_active",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Is Active"
+   "label": "Is Active",
+   "description": "Lưu trữ thông tin Is Active."
   },
   {
    "fieldname": "groups",
    "fieldtype": "Table",
    "label": "Groups",
-   "options": "HD Team Item"
+   "options": "HD Team Item",
+   "description": "Lưu trữ thông tin Groups. (Tham chiếu đến bảng: HD Team Item)"
   },
   {
    "fetch_from": "user.user_image",
    "fieldname": "user_image",
    "fieldtype": "Data",
    "label": "Image",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Image."
   },
   {
    "fieldname": "channel_id",
    "fieldtype": "Data",
-   "label": "Kênh"
+   "label": "Kênh",
+   "description": "Lưu trữ thông tin Kênh."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -102,5 +108,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "agent_name",
- "track_changes": 1
+ "track_changes": 1,
+ "description": "[QUAN TRỌNG DÀNH CHO AI]: Bảng lưu thông tin Nhân viên hỗ trợ (Agent)."
 }

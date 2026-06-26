@@ -31,25 +31,29 @@
    "fieldname": "cond_hidden",
    "fieldtype": "Code",
    "label": "Hide condition",
-   "options": "Javascript"
+   "options": "Javascript",
+   "description": "Lưu trữ thông tin Hide condition."
   },
   {
    "fieldname": "button_label",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Label",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Label."
   },
   {
    "fieldname": "button_icon",
    "fieldtype": "Data",
-   "label": "Icon"
+   "label": "Icon",
+   "description": "Lưu trữ thông tin Icon."
   },
   {
    "default": "0",
    "fieldname": "is_external_link",
    "fieldtype": "Check",
-   "label": "External link"
+   "label": "External link",
+   "description": "Lưu trữ thông tin External link."
   },
   {
    "description": "Action to perform when clicking the button. The doc will be available as `this`",
@@ -63,7 +67,8 @@
    "default": "0",
    "fieldname": "is_enabled",
    "fieldtype": "Check",
-   "label": "Enabled"
+   "label": "Enabled",
+   "description": "Lưu trữ thông tin Enabled."
   },
   {
    "fieldname": "column_break_hzgg",
@@ -106,5 +111,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "button_label"
+ "title_field": "button_label",
+ "description": "Bảng lưu trữ thông tin về HD Action trong hệ thống Helpdesk."
 }

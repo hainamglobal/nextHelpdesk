@@ -20,7 +20,8 @@
    "label": "Date",
    "oldfieldname": "holiday_date",
    "oldfieldtype": "Date",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Date."
   },
   {
    "fieldname": "description",
@@ -29,13 +30,15 @@
    "label": "Description",
    "print_width": "300px",
    "reqd": 1,
-   "width": "300px"
+   "width": "300px",
+   "description": "Nội dung mô tả chi tiết."
   },
   {
    "default": "0",
    "fieldname": "weekly_off",
    "fieldtype": "Check",
-   "label": "Weekly Off"
+   "label": "Weekly Off",
+   "description": "Lưu trữ thông tin Weekly Off."
   },
   {
    "fieldname": "column_break_2",
@@ -56,5 +59,6 @@
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
- "sort_order": "ASC"
+ "sort_order": "ASC",
+ "description": "Bảng lưu trữ thông tin về HD Holiday trong hệ thống Helpdesk."
 }

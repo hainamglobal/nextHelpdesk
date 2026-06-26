@@ -16,14 +16,16 @@
   {
    "fieldname": "content",
    "fieldtype": "Text Editor",
-   "label": "Content"
+   "label": "Content",
+   "description": "Lưu trữ thông tin Content."
   },
   {
    "fieldname": "reference_ticket",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Reference Ticket",
-   "options": "HD Ticket"
+   "options": "HD Ticket",
+   "description": "Lưu trữ thông tin Reference Ticket. (Tham chiếu đến bảng: HD Ticket)"
   },
   {
    "fieldname": "column_break_3",
@@ -34,13 +36,15 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Commented By",
-   "options": "User"
+   "options": "User",
+   "description": "Lưu trữ thông tin Commented By. (Tham chiếu đến bảng: User)"
   },
   {
    "default": "0",
    "fieldname": "is_pinned",
    "fieldtype": "Check",
-   "label": "Is pinned"
+   "label": "Is pinned",
+   "description": "Lưu trữ thông tin Is pinned."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -79,5 +83,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "[QUAN TRỌNG DÀNH CHO AI]: Bảng lưu trữ lịch sử bình luận, email và phản hồi trao đổi trong một Ticket. Bắt buộc JOIN với HD Ticket để biết bình luận thuộc về yêu cầu nào."
 }

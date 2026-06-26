@@ -14,7 +14,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Contact",
-   "options": "Contact"
+   "options": "Contact",
+   "description": "Lưu trữ thông tin Contact. (Tham chiếu đến bảng: Contact)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -28,5 +29,6 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Organization Contact Item trong hệ thống Helpdesk."
 }

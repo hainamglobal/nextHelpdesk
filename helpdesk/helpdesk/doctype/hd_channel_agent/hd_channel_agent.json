@@ -14,18 +14,21 @@
    "fieldname": "channel_agent_name",
    "fieldtype": "Data",
    "label": "Channel Agent Name",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Channel Agent Name."
   },
   {
    "fieldname": "channel_id",
    "fieldtype": "Data",
-   "label": "Channel ID"
+   "label": "Channel ID",
+   "description": "Lưu trữ thông tin Channel ID."
   },
   {
    "fieldname": "is_delete",
    "fieldtype": "Check",
    "label": "Is Delete",
-   "default": "0"
+   "default": "0",
+   "description": "Lưu trữ thông tin Is Delete."
   }
  ],
  "grid_page_length": 50,
@@ -53,5 +56,6 @@
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Channel Agent trong hệ thống Helpdesk."
 }

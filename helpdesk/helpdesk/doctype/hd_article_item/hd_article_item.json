@@ -14,7 +14,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Article",
-   "options": "HD Article"
+   "options": "HD Article",
+   "description": "Lưu trữ thông tin Article. (Tham chiếu đến bảng: HD Article)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -29,5 +30,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ thông tin về HD Article Item trong hệ thống Helpdesk."
 }

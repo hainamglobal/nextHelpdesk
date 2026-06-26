@@ -15,7 +15,8 @@
    "in_list_view": 1,
    "label": "Team",
    "options": "HD Team",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Team. (Tham chiếu đến bảng: HD Team)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -30,5 +31,6 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Team Item trong hệ thống Helpdesk."
 }
