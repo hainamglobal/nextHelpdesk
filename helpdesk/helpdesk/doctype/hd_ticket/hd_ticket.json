@@ -70,7 +70,8 @@
    "in_global_search": 1,
    "in_standard_filter": 1,
    "label": "Subject",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Tiêu đề chính."
   },
   {
    "bold": 1,
@@ -82,7 +83,8 @@
    "label": "Raised By (Email)",
    "oldfieldname": "raised_by",
    "oldfieldtype": "Data",
-   "options": "Email"
+   "options": "Email",
+   "description": "Lưu trữ thông tin Raised By (Email)."
   },
   {
    "default": "Open",
@@ -95,7 +97,8 @@
    "oldfieldname": "status",
    "oldfieldtype": "Select",
    "options": "Open\nReplied\nResolved\nClosed",
-   "search_index": 1
+   "search_index": 1,
+   "description": "Trạng thái hiện tại. Các tùy chọn bao gồm: Open, Replied, Resolved, Closed. Các giá trị có thể chọn: [Open, Replied, Resolved, Closed]"
   },
   {
    "fieldname": "priority",
@@ -103,7 +106,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Priority",
-   "options": "HD Ticket Priority"
+   "options": "HD Ticket Priority",
+   "description": "Mức độ ưu tiên. (Tham chiếu đến bảng: HD Ticket Priority)"
   },
   {
    "fieldname": "custom_severity",
@@ -111,7 +115,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Mức độ nghiêm trọng",
-   "options": "Thấp\nTrung bình\nCao\nKhẩn cấp"
+   "options": "Thấp\nTrung bình\nCao\nKhẩn cấp",
+   "description": "Lưu trữ thông tin Mức độ nghiêm trọng. Các tùy chọn bao gồm: Thấp, Trung bình, Cao, Khẩn cấp. Các giá trị có thể chọn: [Thấp, Trung bình, Cao, Khẩn cấp]"
   },
   {
    "fieldname": "cb00",
@@ -121,20 +126,23 @@
    "fieldname": "ticket_type",
    "fieldtype": "Link",
    "label": "Ticket Type",
-   "options": "HD Ticket Type"
+   "options": "HD Ticket Type",
+   "description": "Lưu trữ thông tin Ticket Type. (Tham chiếu đến bảng: HD Ticket Type)"
   },
   {
    "fieldname": "agent_group",
    "fieldtype": "Link",
    "label": "Agent Group",
-   "options": "HD Team"
+   "options": "HD Team",
+   "description": "Lưu trữ thông tin Agent Group. (Tham chiếu đến bảng: HD Team)"
   },
   {
    "fieldname": "ticket_split_from",
    "fieldtype": "Link",
    "label": "Ticket Split From",
    "options": "HD Ticket",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Ticket Split From. (Tham chiếu đến bảng: HD Ticket)"
   },
   {
    "collapsible": 1,
@@ -150,13 +158,15 @@
    "in_global_search": 1,
    "label": "Description",
    "oldfieldname": "problem_description",
-   "oldfieldtype": "Text"
+   "oldfieldtype": "Text",
+   "description": "Nội dung mô tả chi tiết."
   },
   {
    "fieldname": "template",
    "fieldtype": "Link",
    "label": "Template",
-   "options": "HD Ticket Template"
+   "options": "HD Ticket Template",
+   "description": "Lưu trữ thông tin Template. (Tham chiếu đến bảng: HD Ticket Template)"
   },
   {
    "collapsible": 1,
@@ -168,14 +178,16 @@
    "fieldname": "sla",
    "fieldtype": "Link",
    "label": "SLA",
-   "options": "HD Service Level Agreement"
+   "options": "HD Service Level Agreement",
+   "description": "Lưu trữ thông tin SLA. (Tham chiếu đến bảng: HD Service Level Agreement)"
   },
   {
    "depends_on": "eval: doc.status != 'Replied' && doc.sla;",
    "fieldname": "response_by",
    "fieldtype": "Datetime",
    "label": "Response By",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Response By."
   },
   {
    "collapsible": 1,
@@ -191,33 +203,38 @@
    "fieldtype": "Select",
    "label": "SLA Status",
    "options": "First Response Due\nResolution Due\nFailed\nFulfilled\nPaused",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin SLA Status. Các tùy chọn bao gồm: First Response Due, Resolution Due, Failed, Fulfilled, Paused. Các giá trị có thể chọn: [First Response Due, Resolution Due, Failed, Fulfilled, Paused]"
   },
   {
    "depends_on": "eval: doc.status != 'Replied' && doc.sla;",
    "fieldname": "resolution_by",
    "fieldtype": "Datetime",
    "label": "Resolution By",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Resolution By."
   },
   {
    "fieldname": "service_level_agreement_creation",
    "fieldtype": "Datetime",
    "hidden": 1,
    "label": "SLA Creation",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin SLA Creation."
   },
   {
    "fieldname": "on_hold_since",
    "fieldtype": "Datetime",
    "label": "On Hold Since",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin On Hold Since."
   },
   {
    "fieldname": "total_hold_time",
    "fieldtype": "Duration",
    "label": "Total Hold Time",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Total Hold Time."
   },
   {
    "collapsible": 1,
@@ -230,12 +247,14 @@
    "fieldname": "first_response_time",
    "fieldtype": "Duration",
    "label": "First Response Time",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin First Response Time."
   },
   {
    "fieldname": "first_responded_on",
    "fieldtype": "Datetime",
-   "label": "First Responded On"
+   "label": "First Responded On",
+   "description": "Lưu trữ thông tin First Responded On."
   },
   {
    "fieldname": "column_break_26",
@@ -246,7 +265,8 @@
    "fieldname": "avg_response_time",
    "fieldtype": "Duration",
    "label": "Average Response Time",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Average Response Time."
   },
   {
    "collapsible": 1,
@@ -261,7 +281,8 @@
    "label": "Resolution Details",
    "no_copy": 1,
    "oldfieldname": "resolution_details",
-   "oldfieldtype": "Text"
+   "oldfieldtype": "Text",
+   "description": "Lưu trữ thông tin Resolution Details."
   },
   {
    "depends_on": "eval:!doc.__islocal",
@@ -278,7 +299,8 @@
    "no_copy": 1,
    "oldfieldname": "opening_date",
    "oldfieldtype": "Date",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Opening Date."
   },
   {
    "fieldname": "opening_time",
@@ -287,7 +309,8 @@
    "no_copy": 1,
    "oldfieldname": "opening_time",
    "oldfieldtype": "Time",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Opening Time."
   },
   {
    "depends_on": "eval:!doc.__islocal",
@@ -297,19 +320,22 @@
    "no_copy": 1,
    "oldfieldname": "resolution_date",
    "oldfieldtype": "Date",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Resolution Date."
   },
   {
    "fieldname": "resolution_time",
    "fieldtype": "Duration",
    "label": "Resolution Time",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Resolution Time."
   },
   {
    "fieldname": "user_resolution_time",
    "fieldtype": "Duration",
    "label": "User Resolution Time",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin User Resolution Time."
   },
   {
    "collapsible": 1,
@@ -323,19 +349,22 @@
    "fieldname": "contact",
    "fieldtype": "Link",
    "label": "Contact",
-   "options": "Contact"
+   "options": "Contact",
+   "description": "Lưu trữ thông tin Contact. (Tham chiếu đến bảng: Contact)"
   },
   {
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "HD Customer"
+   "options": "HD Customer",
+   "description": "Lưu trữ thông tin Customer. (Tham chiếu đến bảng: HD Customer)"
   },
   {
    "fieldname": "email_account",
    "fieldtype": "Link",
    "label": "Email Account",
-   "options": "Email Account"
+   "options": "Email Account",
+   "description": "Lưu trữ thông tin Email Account. (Tham chiếu đến bảng: Email Account)"
   },
   {
    "fieldname": "column_break_16",
@@ -345,19 +374,22 @@
    "default": "0",
    "fieldname": "via_customer_portal",
    "fieldtype": "Check",
-   "label": "Via Customer Portal"
+   "label": "Via Customer Portal",
+   "description": "Lưu trữ thông tin Via Customer Portal."
   },
   {
    "fieldname": "attachment",
    "fieldtype": "Attach",
    "hidden": 1,
-   "label": "Attachment"
+   "label": "Attachment",
+   "description": "Lưu trữ thông tin Attachment."
   },
   {
    "fieldname": "content_type",
    "fieldtype": "Data",
    "hidden": 1,
-   "label": "Content Type"
+   "label": "Content Type",
+   "description": "Lưu trữ thông tin Content Type."
   },
   {
    "fieldname": "customer_feedback_section",
@@ -367,23 +399,27 @@
   {
    "fieldname": "feedback_extra",
    "fieldtype": "Long Text",
-   "label": "Feedback (Extra)"
+   "label": "Feedback (Extra)",
+   "description": "Lưu trữ thông tin Feedback (Extra)."
   },
   {
    "fieldname": "feedback",
    "fieldtype": "Link",
    "label": "Feedback (Option)",
-   "options": "HD Ticket Feedback Option"
+   "options": "HD Ticket Feedback Option",
+   "description": "Lưu trữ thông tin Feedback (Option). (Tham chiếu đến bảng: HD Ticket Feedback Option)"
   },
   {
    "fieldname": "feedback_rating",
    "fieldtype": "Rating",
-   "label": "Rating"
+   "label": "Rating",
+   "description": "Lưu trữ thông tin Rating."
   },
   {
    "fieldname": "feedback_text",
    "fieldtype": "Data",
-   "label": "Feedback (Text)"
+   "label": "Feedback (Text)",
+   "description": "Lưu trữ thông tin Feedback (Text)."
   }
  ],
  "icon": "fa fa-issue",
@@ -443,5 +479,6 @@
  "timeline_field": "contact",
  "title_field": "subject",
  "track_changes": 1,
- "track_seen": 1
+ "track_seen": 1,
+ "description": "[QUAN TRỌNG DÀNH CHO AI]: Bảng cốt lõi quản lý các yêu cầu hỗ trợ (Ticket) từ khách hàng. Thường xuyên JOIN với các bảng HD Customer (Khách hàng), HD Team (Nhóm hỗ trợ/Agent Group) và HD Ticket Type (Loại Ticket) để lấy thông tin chi tiết."
 }

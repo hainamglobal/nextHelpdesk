@@ -17,21 +17,24 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Description"
+   "label": "Description",
+   "description": "Nội dung mô tả chi tiết."
   },
   {
    "fieldname": "priority",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Priority",
-   "options": "HD Ticket Priority"
+   "options": "HD Ticket Priority",
+   "description": "Mức độ ưu tiên. (Tham chiếu đến bảng: HD Ticket Priority)"
   },
   {
    "default": "0",
    "fieldname": "is_system",
    "fieldtype": "Check",
    "label": "System",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin System."
   }
  ],
  "links": [],
@@ -101,5 +104,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ thông tin về HD Ticket Type trong hệ thống Helpdesk."
 }

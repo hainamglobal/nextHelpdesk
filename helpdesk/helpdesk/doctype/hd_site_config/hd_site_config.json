@@ -4,29 +4,38 @@
  "creation": "2026-06-06 17:00:18.215001",
  "doctype": "DocType",
  "engine": "InnoDB",
-  "field_order": ["organization","site_url", "api_key", "api_secret"],
+ "field_order": [
+  "organization",
+  "site_url",
+  "api_key",
+  "api_secret"
+ ],
  "fields": [
-    {
-      "fieldname": "organization",
-      "fieldtype": "Data",
-      "label": "Organization"
-    },
-    {
-      "fieldname": "site_url",
-      "fieldtype": "Data",
-      "label": "Site URL"
-    },
-    {
-      "fieldname": "api_key",
-      "fieldtype": "Data",
-      "label": "Api Key"
-    },
-    {
-      "fieldname": "api_secret",
-      "fieldtype": "Password",
-      "label": "Api Secret"
-    }
-  ],
+  {
+   "fieldname": "organization",
+   "fieldtype": "Data",
+   "label": "Organization",
+   "description": "Lưu trữ thông tin Organization."
+  },
+  {
+   "fieldname": "site_url",
+   "fieldtype": "Data",
+   "label": "Site URL",
+   "description": "Lưu trữ thông tin Site URL."
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Data",
+   "label": "Api Key",
+   "description": "Lưu trữ thông tin Api Key."
+  },
+  {
+   "fieldname": "api_secret",
+   "fieldtype": "Password",
+   "label": "Api Secret",
+   "description": "Lưu trữ thông tin Api Secret."
+  }
+ ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
@@ -52,5 +61,6 @@
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Site Config trong hệ thống Helpdesk."
 }

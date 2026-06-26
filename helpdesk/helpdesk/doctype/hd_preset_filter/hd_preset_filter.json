@@ -19,7 +19,8 @@
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Title"
+   "label": "Title",
+   "description": "Lưu trữ thông tin Title."
   },
   {
    "columns": 2,
@@ -27,7 +28,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "DocType",
-   "options": "DocType"
+   "options": "DocType",
+   "description": "Lưu trữ thông tin DocType. (Tham chiếu đến bảng: DocType)"
   },
   {
    "fieldname": "column_break_3",
@@ -39,7 +41,8 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Type",
-   "options": "System\nGlobal\nUser"
+   "options": "System\nGlobal\nUser",
+   "description": "Lưu trữ thông tin Type. Các tùy chọn bao gồm: System, Global, User. Các giá trị có thể chọn: [System, Global, User]"
   },
   {
    "columns": 3,
@@ -48,7 +51,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "description": "Lưu trữ thông tin User. (Tham chiếu đến bảng: User)"
   },
   {
    "fieldname": "section_break_6",
@@ -58,7 +62,8 @@
    "fieldname": "filters",
    "fieldtype": "Table",
    "label": "Filters",
-   "options": "HD Preset Filter Item"
+   "options": "HD Preset Filter Item",
+   "description": "Lưu trữ thông tin Filters. (Tham chiếu đến bảng: HD Preset Filter Item)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -98,5 +103,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "title"
+ "title_field": "title",
+ "description": "Bảng lưu trữ thông tin về HD Preset Filter trong hệ thống Helpdesk."
 }

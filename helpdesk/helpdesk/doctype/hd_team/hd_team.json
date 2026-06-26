@@ -18,20 +18,23 @@
    "fieldname": "team_name",
    "fieldtype": "Data",
    "label": "Name",
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Name."
   },
   {
    "fieldname": "assignment_rule",
    "fieldtype": "Link",
    "label": "Assignment Rule",
    "options": "Assignment Rule",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Assignment Rule. (Tham chiếu đến bảng: Assignment Rule)"
   },
   {
    "fieldname": "users",
    "fieldtype": "Table MultiSelect",
    "label": "Users",
-   "options": "HD Team Member"
+   "options": "HD Team Member",
+   "description": "Lưu trữ thông tin Users."
   },
   {
    "default": "0",
@@ -83,5 +86,6 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "[QUAN TRỌNG DÀNH CHO AI]: Bảng định nghĩa các nhóm hỗ trợ. JOIN với HD Ticket (trường agent_group) để biết nhóm nào đang xử lý."
 }

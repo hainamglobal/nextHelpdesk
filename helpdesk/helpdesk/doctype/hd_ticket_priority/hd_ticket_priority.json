@@ -13,7 +13,8 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Description"
+   "label": "Description",
+   "description": "Nội dung mô tả chi tiết."
   },
   {
    "description": "Lower the Integer value, higher is the priority of the issue",
@@ -78,5 +79,6 @@
  "sort_field": "modified",
  "sort_order": "ASC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ thông tin về HD Ticket Priority trong hệ thống Helpdesk."
 }

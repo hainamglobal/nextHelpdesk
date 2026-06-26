@@ -15,18 +15,21 @@
    "fieldname": "article",
    "fieldtype": "Link",
    "label": "Article",
-   "options": "HD Article"
+   "options": "HD Article",
+   "description": "Lưu trữ thông tin Article. (Tham chiếu đến bảng: HD Article)"
   },
   {
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "description": "Lưu trữ thông tin User. (Tham chiếu đến bảng: User)"
   },
   {
    "fieldname": "feedback",
    "fieldtype": "Int",
-   "label": "Feedback"
+   "label": "Feedback",
+   "description": "Lưu trữ thông tin Feedback."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -63,5 +66,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Article Feedback trong hệ thống Helpdesk."
 }

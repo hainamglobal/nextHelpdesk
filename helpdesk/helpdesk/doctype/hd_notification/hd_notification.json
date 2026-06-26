@@ -23,7 +23,8 @@
    "in_list_view": 1,
    "label": "From",
    "options": "User",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin From. (Tham chiếu đến bảng: User)"
   },
   {
    "fieldname": "user_to",
@@ -31,7 +32,8 @@
    "in_list_view": 1,
    "label": "To",
    "options": "User",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin To. (Tham chiếu đến bảng: User)"
   },
   {
    "fieldname": "notification_type",
@@ -39,19 +41,22 @@
    "in_list_view": 1,
    "label": "Type",
    "options": "Assignment\nMention\nReaction",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Type. Các tùy chọn bao gồm: Assignment, Mention, Reaction. Các giá trị có thể chọn: [Assignment, Mention, Reaction]"
   },
   {
    "fieldname": "reference_ticket",
    "fieldtype": "Link",
    "label": "Ticket",
-   "options": "HD Ticket"
+   "options": "HD Ticket",
+   "description": "Lưu trữ thông tin Ticket. (Tham chiếu đến bảng: HD Ticket)"
   },
   {
    "fieldname": "reference_comment",
    "fieldtype": "Link",
    "label": "Comment",
-   "options": "HD Ticket Comment"
+   "options": "HD Ticket Comment",
+   "description": "Lưu trữ thông tin Comment. (Tham chiếu đến bảng: HD Ticket Comment)"
   },
   {
    "fieldname": "references_section",
@@ -71,7 +76,8 @@
    "default": "0",
    "fieldname": "read",
    "fieldtype": "Check",
-   "label": "Read"
+   "label": "Read",
+   "description": "Lưu trữ thông tin Read."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -108,5 +114,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Notification trong hệ thống Helpdesk."
 }

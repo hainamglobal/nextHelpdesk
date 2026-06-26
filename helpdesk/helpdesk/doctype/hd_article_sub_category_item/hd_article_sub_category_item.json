@@ -17,7 +17,8 @@
    "label": "Sub Category",
    "options": "HD Article Category",
    "reqd": 1,
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Sub Category. (Tham chiếu đến bảng: HD Article Category)"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -32,5 +33,6 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Article Sub Category Item trong hệ thống Helpdesk."
 }

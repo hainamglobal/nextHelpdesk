@@ -31,7 +31,8 @@
    "fieldname": "source_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Source Name"
+   "label": "Source Name",
+   "description": "Lưu trữ thông tin Source Name."
   },
   {
    "fieldname": "source_type",
@@ -39,7 +40,8 @@
    "in_list_view": 1,
    "label": "Source Type",
    "options": "API\nLink",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin Source Type. Các tùy chọn bao gồm: API, Link. Các giá trị có thể chọn: [API, Link]"
   },
   {
    "depends_on": "eval:doc.source_type==\"API\"",
@@ -50,7 +52,8 @@
   {
    "fieldname": "base_url",
    "fieldtype": "Data",
-   "label": "Base URL"
+   "label": "Base URL",
+   "description": "Lưu trữ thông tin Base URL."
   },
   {
    "depends_on": "eval:doc.source_type==\"API\"",
@@ -61,7 +64,8 @@
   {
    "fieldname": "query_route",
    "fieldtype": "Data",
-   "label": "Query Route String"
+   "label": "Query Route String",
+   "description": "Lưu trữ thông tin Query Route String."
   },
   {
    "fieldname": "cb_1",
@@ -70,7 +74,8 @@
   {
    "fieldname": "search_term_param_name",
    "fieldtype": "Data",
-   "label": "Search Term Param Name"
+   "label": "Search Term Param Name",
+   "description": "Lưu trữ thông tin Search Term Param Name."
   },
   {
    "depends_on": "eval:doc.source_type==\"API\"",
@@ -81,17 +86,20 @@
   {
    "fieldname": "response_result_key_path",
    "fieldtype": "Data",
-   "label": "Response Result Key Path"
+   "label": "Response Result Key Path",
+   "description": "Lưu trữ thông tin Response Result Key Path."
   },
   {
    "fieldname": "post_route",
    "fieldtype": "Data",
-   "label": "Post Route String"
+   "label": "Post Route String",
+   "description": "Lưu trữ thông tin Post Route String."
   },
   {
    "fieldname": "post_route_key_list",
    "fieldtype": "Data",
-   "label": "Post Route Key List"
+   "label": "Post Route Key List",
+   "description": "Lưu trữ thông tin Post Route Key List."
   },
   {
    "fieldname": "response_post_cb",
@@ -100,12 +108,14 @@
   {
    "fieldname": "post_title_key",
    "fieldtype": "Data",
-   "label": "Post Title Key"
+   "label": "Post Title Key",
+   "description": "Lưu trữ thông tin Post Title Key."
   },
   {
    "fieldname": "post_description_key",
    "fieldtype": "Data",
-   "label": "Post Description Key"
+   "label": "Post Description Key",
+   "description": "Lưu trữ thông tin Post Description Key."
   },
   {
    "depends_on": "eval:doc.source_type==\"Link\"",
@@ -117,22 +127,26 @@
    "fieldname": "source_doctype",
    "fieldtype": "Link",
    "label": "Source DocType",
-   "options": "DocType"
+   "options": "DocType",
+   "description": "Lưu trữ thông tin Source DocType. (Tham chiếu đến bảng: DocType)"
   },
   {
    "fieldname": "result_title_field",
    "fieldtype": "Data",
-   "label": "Result Title Field"
+   "label": "Result Title Field",
+   "description": "Lưu trữ thông tin Result Title Field."
   },
   {
    "fieldname": "result_preview_field",
    "fieldtype": "Data",
-   "label": "Result Preview Field"
+   "label": "Result Preview Field",
+   "description": "Lưu trữ thông tin Result Preview Field."
   },
   {
    "fieldname": "result_route_field",
    "fieldtype": "Data",
-   "label": "Result Route Field"
+   "label": "Result Route Field",
+   "description": "Lưu trữ thông tin Result Route Field."
   }
  ],
  "istable": 1,
@@ -147,5 +161,6 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "track_changes": 1
+ "track_changes": 1,
+ "description": "Bảng lưu trữ thông tin về HD Support Search Source trong hệ thống Helpdesk."
 }

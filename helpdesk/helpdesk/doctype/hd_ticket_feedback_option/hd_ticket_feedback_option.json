@@ -16,14 +16,16 @@
    "fieldname": "rating",
    "fieldtype": "Rating",
    "in_list_view": 1,
-   "label": "Rating"
+   "label": "Rating",
+   "description": "Lưu trữ thông tin Rating."
   },
   {
    "fieldname": "label",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Label",
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Label."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -73,5 +75,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "label"
+ "title_field": "label",
+ "description": "Bảng lưu trữ thông tin về HD Ticket Feedback Option trong hệ thống Helpdesk."
 }

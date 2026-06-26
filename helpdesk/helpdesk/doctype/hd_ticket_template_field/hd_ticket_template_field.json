@@ -17,27 +17,31 @@
    "fieldname": "fieldname",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Field (fieldname)"
+   "label": "Field (fieldname)",
+   "description": "Lưu trữ thông tin Field (fieldname)."
   },
   {
    "default": "0",
    "fieldname": "required",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Required"
+   "label": "Required",
+   "description": "Lưu trữ thông tin Required."
   },
   {
    "default": "0",
    "fieldname": "hide_from_customer",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Hide from customer"
+   "label": "Hide from customer",
+   "description": "Lưu trữ thông tin Hide from customer."
   },
   {
    "fieldname": "url_method",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "URL/Method"
+   "label": "URL/Method",
+   "description": "Lưu trữ thông tin URL/Method."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -51,5 +55,6 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Ticket Template Field trong hệ thống Helpdesk."
 }

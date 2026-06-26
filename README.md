@@ -51,3 +51,17 @@ There are many ways you can contribute even if you don't code:
 ## License
 
 [GNU Affero General Public License v3.0](/licence.md)
+
+
+
+Cách sử dụng helpdesk (sản phẩm tạo ra bới nextGRP)
+
+trong bảng Site Credential
+
+Tạo một tài khoàn với email là adminhotro@gmail.com và quyền là 
+
+Organization = MainSiteToHD 
+Site URL = điền domain mà bạn muốn gửi tới 
+Api Key : điền Api Key của site_url trên của tài khoản adminhotro@gmail.com 
+Api Secret : điền Api Secret của site_url trên của tài khoản adminhotro@gmail.com 
+

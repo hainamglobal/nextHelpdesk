@@ -30,21 +30,24 @@
    "oldfieldname": "holiday_list_name",
    "oldfieldtype": "Data",
    "reqd": 1,
-   "unique": 1
+   "unique": 1,
+   "description": "Lưu trữ thông tin Holiday List Name."
   },
   {
    "fieldname": "from_date",
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "From Date",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin From Date."
   },
   {
    "fieldname": "to_date",
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "To Date",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Lưu trữ thông tin To Date."
   },
   {
    "fieldname": "column_break_4",
@@ -55,7 +58,8 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Total Holidays",
-   "read_only": 1
+   "read_only": 1,
+   "description": "Lưu trữ thông tin Total Holidays."
   },
   {
    "collapsible": 1,
@@ -71,13 +75,15 @@
    "no_copy": 1,
    "options": "\nSunday\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday",
    "print_hide": 1,
-   "report_hide": 1
+   "report_hide": 1,
+   "description": "Lưu trữ thông tin Weekly Off. Các tùy chọn bao gồm: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday. Các giá trị có thể chọn: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]"
   },
   {
    "fieldname": "get_weekly_off_dates",
    "fieldtype": "Button",
    "label": "Add to Holidays",
-   "options": "get_weekly_off_dates"
+   "options": "get_weekly_off_dates",
+   "description": "Lưu trữ thông tin Add to Holidays."
   },
   {
    "fieldname": "holidays_section",
@@ -90,13 +96,15 @@
    "label": "Holidays",
    "oldfieldname": "holiday_list_details",
    "oldfieldtype": "Table",
-   "options": "HD Holiday"
+   "options": "HD Holiday",
+   "description": "Lưu trữ thông tin Holidays. (Tham chiếu đến bảng: HD Holiday)"
   },
   {
    "fieldname": "clear_table",
    "fieldtype": "Button",
    "label": "Clear Table",
-   "options": "clear_table"
+   "options": "clear_table",
+   "description": "Lưu trữ thông tin Clear Table."
   },
   {
    "fieldname": "section_break_9",
@@ -106,7 +114,8 @@
    "fieldname": "color",
    "fieldtype": "Color",
    "label": "Color",
-   "print_hide": 1
+   "print_hide": 1,
+   "description": "Lưu trữ thông tin Color."
   }
  ],
  "icon": "fa fa-calendar",
@@ -154,5 +163,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "description": "Bảng lưu trữ thông tin về HD Service Holiday List trong hệ thống Helpdesk."
 }
