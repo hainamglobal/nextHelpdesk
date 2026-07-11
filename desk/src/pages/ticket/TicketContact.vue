@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col border-l">
     <span>
-      <TicketSidebarHeader title="Contact" />
+      <TicketSidebarHeader title="Liên hệ" />
       <div
         v-if="contact.full_name"
         class="flex items-center gap-3 border-b py-6"

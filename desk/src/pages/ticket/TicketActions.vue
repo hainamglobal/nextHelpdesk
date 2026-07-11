@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col border-l">
-    <TicketSidebarHeader title="Actions" />
+    <TicketSidebarHeader title="Thao tác" />
     <div class="flex flex-wrap gap-2 overflow-auto p-5">
       <span v-if="!actions.data" class="text-base">Nothing to show</span>
       <Button
