@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col border-l">
-    <TicketSidebarHeader title="Views" />
+    <TicketSidebarHeader title="Lượt xem" />
     <div class="overflow-auto p-5">
       <ol class="relative border-l border-gray-200 text-base">
         <li

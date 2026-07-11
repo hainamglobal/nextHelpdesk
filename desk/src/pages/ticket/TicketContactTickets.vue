@@ -10,7 +10,7 @@
       class="flex cursor-pointer items-center justify-between"
       @click="isExpanded = !isExpanded"
     >
-      <div class="font-medium text-gray-800">Open tickets</div>
+      <div class="font-medium text-gray-800">Mở phiếu</div>
       <LucideChevronUp v-if="isExpanded" class="w-4 text-gray-700" />
       <LucideChevronDown v-else class="w-4 text-gray-700" />
     </div>
