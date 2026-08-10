@@ -491,9 +491,10 @@ class HDTicket(Document):
 			cc = cc or last_communication.cc
 			bcc = bcc or last_communication.bcc
 
-		if recipients == "Administrator":
-			admin_email = frappe.get_value("User", "Administrator", "email")
-			recipients = admin_email
+		if recipients:
+			user_email = frappe.db.get_value("User", recipients, "email")
+			if user_email:
+				recipients = user_email
 
 		communication = frappe.get_doc(
 			{
@@ -544,12 +545,8 @@ class HDTicket(Document):
 			"portal_link": self.portal_uri,
 			"ticket_id": self.name,
 		}
-		send_delayed = True
-		send_now = False
-
-		if self.instantly_send_email():
-			send_delayed = False
-			send_now = True
+		send_delayed = False
+		send_now = True
 
 		try:
 			frappe.sendmail(
