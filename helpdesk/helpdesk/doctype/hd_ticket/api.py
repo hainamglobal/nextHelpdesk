@@ -13,9 +13,40 @@ from helpdesk.service.ticket_service import TicketService
 
 @frappe.whitelist()
 def new(doc, attachments=[]):
+	if isinstance(doc, str):
+		doc = frappe.parse_json(doc)
+	if isinstance(attachments, str):
+		attachments = frappe.parse_json(attachments)
 	doc["doctype"] = "HD Ticket"
 	doc["via_customer_portal"] = bool(frappe.session.user)
+
+	if doc.get("custom_severity"):
+		sev_map = {
+			"Thấp": "Low",
+			"Trung bình": "Medium",
+			"Cao": "High",
+			"Khẩn cấp": "Urgent",
+		}
+		if doc.get("custom_severity") in sev_map:
+			doc["priority"] = sev_map[doc["custom_severity"]]
+
 	d = frappe.get_doc(doc).insert()
+
+	if doc.get("custom_severity"):
+		try:
+			d.db_set("custom_severity", doc.get("custom_severity"), update_modified=False)
+		except Exception:
+			try:
+				frappe.reload_doc("helpdesk", "doctype", "hd_ticket")
+				d.db_set("custom_severity", doc.get("custom_severity"), update_modified=False)
+			except Exception:
+				pass
+
+	if doc.get("priority"):
+		try:
+			d.db_set("priority", doc.get("priority"), update_modified=False)
+		except Exception:
+			pass
 	d.create_communication_via_contact(d.description, attachments)
 	
 	# Tự động gán phiếu (Auto Assignment)
