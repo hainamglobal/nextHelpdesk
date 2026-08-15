@@ -5,19 +5,25 @@
         <TicketSidebarHeader :title="t('ticket_details.title')" />
         <div class="mx-5 my-6 flex flex-col justify-between gap-3.5 text-base">
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.id') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.id")
+            }}</span>
             <span class="block break-words font-medium text-gray-900">
               {{ data.name }}
             </span>
           </div>
           <div v-if="data.customer" class="space-y-1.5">
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.customer') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.customer")
+            }}</span>
             <span class="block break-words font-medium text-gray-900">
               {{ data.customer }}
             </span>
           </div>
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.first_response') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.first_response")
+            }}</span>
             <span class="mr-2 font-medium text-gray-900">
               {{ dayjs(data.first_responded_on || data.response_by).short() }}
             </span>
@@ -35,13 +41,20 @@
               theme="green"
               variant="outline"
             />
-            <Badge v-else :label="t('ticket_details.failed')" theme="red" variant="outline" />
+            <Badge
+              v-else
+              :label="t('ticket_details.failed')"
+              theme="red"
+              variant="outline"
+            />
           </div>
           <div
             v-if="data.resolution_date || data.resolution_by"
             class="space-y-1.5"
           >
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.resolution') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.resolution")
+            }}</span>
             <span class="mr-2 font-medium text-gray-900">
               {{ dayjs(data.resolution_date || data.resolution_by).short() }}
             </span>
@@ -59,10 +72,17 @@
               theme="green"
               variant="outline"
             />
-            <Badge v-else :label="t('ticket_details.failed')" theme="red" variant="outline" />
+            <Badge
+              v-else
+              :label="t('ticket_details.failed')"
+              theme="red"
+              variant="outline"
+            />
           </div>
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.modified') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.modified")
+            }}</span>
             <Tooltip :text="dayjs(ticket.data.modified).long()">
               <span class="block break-words font-medium text-gray-900">
                 {{ dayjs(ticket.data.modified).fromNow() }}
@@ -70,13 +90,21 @@
             </Tooltip>
           </div>
           <div class="space-y-1.5">
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.source') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.source")
+            }}</span>
             <span class="block break-words font-medium text-gray-900">
-              {{ ticket.data.via_customer_portal ? t('ticket_details.portal') : t('ticket_details.mail') }}
+              {{
+                ticket.data.via_customer_portal
+                  ? t("ticket_details.portal")
+                  : t("ticket_details.mail")
+              }}
             </span>
           </div>
           <div v-if="data.feedback_rating" class="space-y-1.5">
-            <span class="block text-sm text-gray-700">{{ t('ticket_details.feedback') }}</span>
+            <span class="block text-sm text-gray-700">{{
+              t("ticket_details.feedback")
+            }}</span>
             <StarRating :rating="data.feedback_rating" />
             <span class="block font-medium text-gray-900">
               {{ data.feedback_text }}
@@ -101,8 +129,19 @@
         </span>
         <Autocomplete
           :options="o.store.dropdown"
-          :placeholder="t('ticket_details.select_placeholder', { label: o.label.toLowerCase() })"
-          :value="data[o.field] ? { label: o.store.labelMap?.[data[o.field]] || data[o.field], value: data[o.field] } : null"
+          :placeholder="
+            t('ticket_details.select_placeholder', {
+              label: o.label.toLowerCase(),
+            })
+          "
+          :value="
+            data[o.field]
+              ? {
+                  label: o.store.labelMap?.[data[o.field]] || data[o.field],
+                  value: data[o.field],
+                }
+              : null
+          "
           @change="update(o.field, $event.value)"
         />
       </div>
@@ -146,6 +185,28 @@ const options = computed(() => [
     field: "priority",
     label: t("ticket_details.priority"),
     store: useTicketPriorityStore(),
+  },
+  {
+    field: "custom_severity",
+    label: "Mức độ nghiêm trọng",
+    store: {
+      dropdown: [
+        { label: "Thấp", value: "Thấp" },
+        { label: "Trung bình", value: "Trung bình" },
+        { label: "Cao", value: "Cao" },
+        { label: "Khẩn cấp", value: "Khẩn cấp" },
+      ],
+      labelMap: {
+        Thấp: "Thấp",
+        "Trung bình": "Trung bình",
+        Cao: "Cao",
+        "Khẩn cấp": "Khẩn cấp",
+        Low: "Thấp",
+        Medium: "Trung bình",
+        High: "Cao",
+        Urgent: "Khẩn cấp",
+      },
+    },
   },
   {
     field: "agent_group",

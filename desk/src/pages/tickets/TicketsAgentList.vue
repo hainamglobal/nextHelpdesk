@@ -18,9 +18,15 @@
     </template>
     <template #custom_severity="{ data }">
       <Badge
-        v-if="data.custom_severity"
-        :label="severityLabelMap[data.custom_severity] || data.custom_severity"
-        :theme="severityColorMap[data.custom_severity] || 'gray'"
+        v-if="data.custom_severity || data.priority"
+        :label="
+          severityLabelMap[data.custom_severity || data.priority] ||
+          data.custom_severity ||
+          data.priority
+        "
+        :theme="
+          severityColorMap[data.custom_severity || data.priority] || 'gray'
+        "
         variant="subtle"
       />
       <span v-else>⸺</span>
@@ -109,10 +115,16 @@
     </template>
     <template #customer="{ data }">
       <div class="flex flex-col">
-        <span class="font-medium text-gray-900 truncate" :title="getDisplayName(data)">
+        <span
+          class="truncate font-medium text-gray-900"
+          :title="getDisplayName(data)"
+        >
           {{ getDisplayName(data) }}
         </span>
-        <span class="text-xs text-gray-500 truncate" :title="getEmail(data.raised_by)">
+        <span
+          class="truncate text-xs text-gray-500"
+          :title="getEmail(data.raised_by)"
+        >
           {{ getEmail(data.raised_by) }}
         </span>
       </div>
@@ -144,7 +156,7 @@ import { dayjs } from "@/dayjs";
 import { useAgentStore } from "@/stores/agent";
 import { useTicketStatusStore } from "@/stores/ticketStatus";
 import { useAuthStore } from "@/stores/auth";
-import { createToast, getAssign } from "@/utils";
+import { createToast } from "@/utils";
 import { Resource } from "@/types";
 import { useError } from "@/composables/error";
 import { ListView, UserAvatar } from "@/components";
@@ -154,7 +166,7 @@ interface P {
   columns: any[];
 }
 
-defineProps<P>();
+const props = defineProps<P>();
 const agentStore = useAgentStore();
 const authStore = useAuthStore();
 const ticketStatusStore = useTicketStatusStore();
@@ -197,9 +209,9 @@ const severityLabelMap: Record<string, string> = {
   Medium: "Trung bình",
   Low: "Thấp",
   "Khẩn cấp": "Khẩn cấp",
-  "Cao": "Cao",
+  Cao: "Cao",
   "Trung bình": "Trung bình",
-  "Thấp": "Thấp",
+  Thấp: "Thấp",
 };
 
 const severityColorMap: Record<string, string> = {
@@ -207,9 +219,9 @@ const severityColorMap: Record<string, string> = {
   Medium: "orange",
   High: "red",
   Urgent: "red",
-  "Thấp": "green",
+  Thấp: "green",
   "Trung bình": "orange",
-  "Cao": "red",
+  Cao: "red",
   "Khẩn cấp": "red",
 };
 
@@ -242,7 +254,7 @@ function getDisplayName(data: any) {
     if (data.contact.full_name) return data.contact.full_name;
     if (data.contact.name) return data.contact.name;
   }
-  
+
   // Try to parse name from raised_by (e.g. "John Doe <john@doe.com>")
   if (data.raised_by) {
     const match = data.raised_by.match(/^(.*?)\s*<.*>$/);
@@ -251,13 +263,13 @@ function getDisplayName(data: any) {
       if (name) return name;
     }
   }
-  
+
   if (data.customer) return data.customer;
-  
+
   // Fallback to email prefix if no name found
   if (data.raised_by) {
     const email = getEmail(data.raised_by);
-    return email.split('@')[0];
+    return email.split("@")[0];
   }
   return "Không rõ";
 }
@@ -270,15 +282,18 @@ function getEmail(raisedBy: string) {
 
 function assignOpts(selected: Set<number>) {
   // Loại bỏ các ticket không thuộc quyền thao tác của user hiện tại
-  const validSelectedIds = Array.from(selected).filter(ticketId => {
-    const ticket = props.resource?.data?.find((t: any) => t.name === ticketId);
+  const validSelectedIds = Array.from(selected).filter((ticketId) => {
+    const ticket = (
+      props.resource?.data as Record<string, any>[] | undefined
+    )?.find((t) => t.name === ticketId);
     if (!ticket) return false;
     // Nếu là Admin thì thao tác được tất cả
     if (authStore.isAdmin) return true;
-    
-    // Được phép thao tác nếu ticket chưa gán cho ai (để nhận) 
+
+    // Được phép thao tác nếu ticket chưa gán cho ai (để nhận)
     // hoặc đã gán cho chính user hiện tại
-    const isUnassigned = !ticket._assign || ticket._assign === '[]' || ticket._assign === '';
+    const isUnassigned =
+      !ticket._assign || ticket._assign === "[]" || ticket._assign === "";
     const isMine = ticket._assign && ticket._assign.includes(authStore.userId);
     return isUnassigned || isMine;
   });
@@ -287,14 +302,18 @@ function assignOpts(selected: Set<number>) {
     label: a.agent_name,
     onClick: () => {
       if (validSelectedIds.length === 0) {
-        createToast({ title: "Không có phiếu hợp lệ để phân công", icon: "x", iconClasses: "text-red-500" });
+        createToast({
+          title: "Không có phiếu hợp lệ để phân công",
+          icon: "x",
+          iconClasses: "text-red-500",
+        });
         return;
       }
       bulkAssignTicketToAgent.submit({
         ticket_ids: validSelectedIds,
         agent_id: a.name,
       });
-    }
+    },
   }));
 }
 </script>

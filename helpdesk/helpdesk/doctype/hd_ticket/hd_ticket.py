@@ -169,10 +169,37 @@ class HDTicket(Document):
 		self.set_raised_by()
 		self.set_contact()
 		self.set_customer()
+		self.sync_severity_and_priority()
 		self.set_priority()
 		self.set_feedback_values()
 		self.apply_escalation_rule()
 		self.set_sla()
+
+	def sync_severity_and_priority(self):
+		severity_priority_map = {
+			"Thấp": "Low",
+			"Low": "Low",
+			"Trung bình": "Medium",
+			"Medium": "Medium",
+			"Cao": "High",
+			"High": "High",
+			"Khẩn cấp": "Urgent",
+			"Urgent": "Urgent",
+		}
+		priority_severity_map = {
+			"Low": "Thấp",
+			"Medium": "Trung bình",
+			"High": "Cao",
+			"Urgent": "Khẩn cấp",
+		}
+
+		if self.custom_severity:
+			mapped_priority = severity_priority_map.get(self.custom_severity)
+			if mapped_priority and frappe.db.exists("HD Ticket Priority", mapped_priority):
+				self.priority = mapped_priority
+
+		if self.priority and not self.custom_severity:
+			self.custom_severity = priority_severity_map.get(self.priority, "Trung bình")
 
 	def validate(self):
 		self.validate_feedback()
