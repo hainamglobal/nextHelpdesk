@@ -9,9 +9,10 @@ from helpdesk.helpdesk.doctype.hd_ticket_template.api import get_one as get_temp
 from helpdesk.utils import check_permissions, get_customer, is_agent
 from helpdesk.service.agent_service import AgentService
 from helpdesk.service.ticket_service import TicketService
+from helpdesk.service.external_channel_service import run_as_admin
 
-
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
+@run_as_admin
 def new(doc, attachments=[]):
 	if isinstance(doc, str):
 		doc = frappe.parse_json(doc)
