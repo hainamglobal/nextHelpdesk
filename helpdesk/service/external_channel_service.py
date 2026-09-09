@@ -9,7 +9,7 @@ def run_as_admin(func):
     def wrapper(*args, **kwargs):
         original_user = getattr(frappe.session, "user", "Guest")
         try:
-            frappe.set_user("adminhotro@gmail.com")
+            frappe.set_user("Administrator")
             return func(*args, **kwargs)
         finally:
             frappe.set_user(original_user)
@@ -26,8 +26,8 @@ class HDRavenChannelService:
             
         self.channel_id = channel_id
 
-        if not self.get_member_from_email("adminhotro@gmail.com"):
-            self.add_member_to_channel("adminhotro@gmail.com")
+        if not self.get_member_from_email("Administrator"):
+            self.add_member_to_channel("Administrator")
 
     @run_as_admin
     def create_raven_channel(self):
