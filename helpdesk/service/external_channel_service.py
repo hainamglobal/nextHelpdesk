@@ -26,8 +26,8 @@ class HDRavenChannelService:
             
         self.channel_id = channel_id
 
-        if not self.get_member_from_email("Administrator"):
-            self.add_member_to_channel("Administrator")
+        if not self.get_member_from_email("phamducbinh1712000@gmail.com"):
+            self.add_member_to_channel("phamducbinh1712000@gmail.com")
 
     @run_as_admin
     def create_raven_channel(self):
